@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html
         lang="en"
-        xmlns:th="http://www.thymeleaf.org">
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
     <p th:if="${error_message}" th:text="${error_message}"></p>
-    <form th:action="@{/register}" method="post">
-        <label for="fusername">Username</label><br>
-        <input type="text" id="fusername" name="fusername" required><br>
-        <label for="fpassword">Password</label><br>
-        <input type="text" id="fpassword" name="fpassword" required><br>
-        <input type="submit" value="Register">
-    </form>
+    <div sec:authorize="!isAuthenticated()">
+        <form method="post" th:action="@{/register}" th:object="${userForm}">
+            <label for="fusername">Username</label><br>
+            <input th:field="*{username}" id="fusername" name="fusername" required type="text"><br>
+            <label for="fpassword">Password</label><br>
+            <input th:field="*{password}" id="fpassword" name="fpassword" required type="text"><br>
+            <input type="submit" value="Register">
+        </form>
+    </div>
     <a th:href="@{/login}">Login page</a><br>
-    <a th:href="@{/userlist}">List of existing users</a>
+    <div sec:authorize="hasAuthority('Role_Admin')">
+        <a th:href="@{/userlist}">List of existing users</a>
+    </div>
 </body>
 </html>
