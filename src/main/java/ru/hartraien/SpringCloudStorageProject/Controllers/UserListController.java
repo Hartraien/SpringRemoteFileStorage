@@ -1,10 +1,15 @@
 package ru.hartraien.SpringCloudStorageProject.Controllers;
 
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.hartraien.SpringCloudStorageProject.Services.UserService;
+
 
 @Controller
 @RequestMapping("userlist")
@@ -17,10 +22,19 @@ public class UserListController
         this.userService = userService;
     }
 
-    @GetMapping
-    public String getPage( Model model )
+    @GetMapping("")
+    public String getPartialList(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "100") int size,
+            Model model
+    )
     {
-        model.addAttribute( "users", userService.getAllUsers() );
+        if ( pageNumber < 0 )
+            pageNumber = 0;
+        if ( size <= 0 )
+            size = 100;
+        Pageable request = PageRequest.of( pageNumber, size );
+        model.addAttribute( "users", userService.getAllUsersPaging( request ) );
         return "userlist";
     }
 }

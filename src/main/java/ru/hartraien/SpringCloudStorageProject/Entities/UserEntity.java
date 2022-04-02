@@ -2,6 +2,7 @@ package ru.hartraien.SpringCloudStorageProject.Entities;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -66,5 +67,20 @@ public class UserEntity
     public void addRole( Role role )
     {
         roles.add( role );
+    }
+
+    @Override
+    public boolean equals( Object o )
+    {
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
+        UserEntity that = (UserEntity) o;
+        return username.equals( that.username ) && password.equals( that.password );
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash( username, password );
     }
 }

@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 //.csrf().disable()
                 .authorizeRequests()
                 .antMatchers( "/lockedpage" ).hasAnyAuthority( "Role_Admin", "Role_User" )
-                .antMatchers( "/userlist" ).hasAuthority( "Role_Admin" )
+                .antMatchers( "/userlist/**" ).hasAuthority( "Role_Admin" )
                 .antMatchers( "/**" ).permitAll()
                 .anyRequest().authenticated()
                 .and()
