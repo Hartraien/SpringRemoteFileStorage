@@ -54,6 +54,7 @@ public class InitBean
 
         generateNRandomUsers( userRole, UserCount );
 
+        System.err.println( admin.getDir().getDirname() );
     }
 
     private UserEntity generateAdminUser( Role userRole, Role adminRole )

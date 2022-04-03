@@ -46,9 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     protected void configure( HttpSecurity http ) throws Exception
     {
         http
-                //.csrf().disable()
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers( "/lockedpage" ).hasAnyAuthority( "Role_Admin", "Role_User" )
+                .antMatchers( "/lockedpage", "/uploadpage/**" ).hasAnyAuthority( "Role_Admin", "Role_User" )
                 .antMatchers( "/userlist/**" ).hasAuthority( "Role_Admin" )
                 .antMatchers( "/**" ).permitAll()
                 .anyRequest().authenticated()

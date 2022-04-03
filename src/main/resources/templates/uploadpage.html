@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+        xmlns:th="http://www.thymeleaf.org"
+
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <h1 sec:authentication="name">Username</h1>
+
+    <div>
+        <table>
+            <tr>
+                <th>Filename</th>
+            </tr>
+            <tr th:each="file: ${files}">
+                <td>
+                    <a th:href="@{/uploadpage/{id} (id=${file})}" th:text="${file}">File</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <form method="post" action="/uploadpage" enctype="multipart/form-data">
+            <table>
+                <tr><td>File to upload:</td><td><input type="file" name="file"/></td></tr>
+                <tr><td><input type="submit" value="Upload file"/></td></tr>
+            </table>
+        </form>
+    </div>
+
+</body>
+</html>

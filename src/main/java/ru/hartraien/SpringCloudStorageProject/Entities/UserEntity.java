@@ -19,6 +19,9 @@ public class UserEntity
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private DirectoryEntity dir;
+
     public UserEntity()
     {
         roles = new HashSet<>();
@@ -69,6 +72,16 @@ public class UserEntity
         roles.add( role );
     }
 
+    public DirectoryEntity getDir()
+    {
+        return dir;
+    }
+
+    public void setDir( DirectoryEntity dir )
+    {
+        this.dir = dir;
+    }
+
     @Override
     public boolean equals( Object o )
     {
@@ -83,4 +96,5 @@ public class UserEntity
     {
         return Objects.hash( username, password );
     }
+
 }

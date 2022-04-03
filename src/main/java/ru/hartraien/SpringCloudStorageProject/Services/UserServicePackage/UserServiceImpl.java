@@ -9,6 +9,7 @@ import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.RoleRepository;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
+import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,13 +20,15 @@ public class UserServiceImpl implements UserService
     private static final int DIR_LENGTH = 10;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final DirService dirService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl( UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder )
+    public UserServiceImpl( UserRepository userRepository, RoleRepository roleRepository, DirService dirService, PasswordEncoder passwordEncoder )
     {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.dirService = dirService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -35,15 +38,16 @@ public class UserServiceImpl implements UserService
     {
         if ( userNotInDB( user ) )
         {
-            encodeAndAddUserRole( user );
+            processUser( user );
             userRepository.save( user );
         }
     }
 
-    private UserEntity encodeAndAddUserRole( UserEntity user )
+    private UserEntity processUser( UserEntity user )
     {
         user.setPassword( passwordEncoder.encode( user.getPassword() ) );
         Role role_user = roleRepository.findRoleByName( "Role_User" );
+        user.setDir( dirService.generateNewDir() );
         if ( role_user != null )
             user.addRole( role_user );
         return user;
@@ -73,7 +77,7 @@ public class UserServiceImpl implements UserService
         userRepository.saveAll(
                 entities.stream().filter( this::userNotInDB )
                         .distinct()
-                        .map( this::encodeAndAddUserRole )
+                        .map( this::processUser )
                         .collect( Collectors.toList() )
         );
     }
