@@ -2,12 +2,11 @@ package ru.hartraien.SpringCloudStorageProject.Init;
 
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
-import ru.hartraien.SpringCloudStorageProject.Services.RoleService;
-import ru.hartraien.SpringCloudStorageProject.Services.UserService;
+import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,25 +46,30 @@ public class InitBean
 
         roleService.save( adminRole );
 
+        UserEntity admin = generateAdminUser( userRole, adminRole );
+        userService.save( admin );
+
+        int UserCount = 10;
+
+
+        generateNRandomUsers( userRole, UserCount );
+
+    }
+
+    private UserEntity generateAdminUser( Role userRole, Role adminRole )
+    {
         UserEntity admin = new UserEntity();
         admin.setUsername( "admin" );
         admin.setPassword( "1234" );
         admin.addRole( adminRole );
         admin.addRole( userRole );
-        userService.saveAdmin( admin );
-
-        int UserCount = 200;
-
-
-        generateNRandomUsers( userRole, UserCount );
-
-
+        return admin;
     }
 
     private void generateNRandomUsers( Role userRole, int UserCount )
     {
         RandomStringProducer randomStringProducer = new RandomStringProducerImpl();
-        List<UserEntity> entities = new ArrayList<>(UserCount);
+        List<UserEntity> entities = new ArrayList<>( UserCount );
         for ( int i = 0; i < UserCount; i++ )
         {
             UserEntity userEntity = new UserEntity();
@@ -75,6 +79,6 @@ public class InitBean
             entities.add( userEntity );
         }
 
-        userService.saveAll(entities);
+        userService.saveAll( entities );
     }
 }

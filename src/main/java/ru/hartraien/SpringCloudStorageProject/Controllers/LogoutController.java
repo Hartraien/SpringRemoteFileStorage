@@ -15,7 +15,7 @@ public class LogoutController
     @GetMapping
     public String getPage( HttpServletRequest request )
     {
-        System.err.println("Logged out using " + request.getMethod());
+        System.err.println( "Logged out using " + request.getMethod() );
         return "logoutpage";
     }
 }

@@ -1,4 +1,4 @@
-package ru.hartraien.SpringCloudStorageProject.Services;
+package ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage;
 
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 

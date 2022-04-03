@@ -1,4 +1,4 @@
-package ru.hartraien.SpringCloudStorageProject.Services;
+package ru.hartraien.SpringCloudStorageProject.Services.SecurityServicePackage;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

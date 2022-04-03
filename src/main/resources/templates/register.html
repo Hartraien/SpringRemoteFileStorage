@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html
         lang="en"
-        xmlns:th="http://www.thymeleaf.org"
         xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+        xmlns:th="http://www.thymeleaf.org"
 >
 <head>
     <meta charset="UTF-8">
@@ -13,9 +13,9 @@
     <div sec:authorize="!isAuthenticated()">
         <form method="post" th:action="@{/register}" th:object="${userForm}">
             <label for="fusername">Username</label><br>
-            <input th:field="*{username}" id="fusername" name="fusername" required type="text"><br>
+            <input id="fusername" name="fusername" required th:field="*{username}" type="text"><br>
             <label for="fpassword">Password</label><br>
-            <input th:field="*{password}" id="fpassword" name="fpassword" required type="text"><br>
+            <input id="fpassword" name="fpassword" required th:field="*{password}" type="text"><br>
             <input type="submit" value="Register">
         </form>
     </div>

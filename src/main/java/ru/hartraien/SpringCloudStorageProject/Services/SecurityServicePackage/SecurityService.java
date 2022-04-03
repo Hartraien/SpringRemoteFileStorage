@@ -1,4 +1,4 @@
-package ru.hartraien.SpringCloudStorageProject.Services;
+package ru.hartraien.SpringCloudStorageProject.Services.SecurityServicePackage;
 
 public interface SecurityService
 {

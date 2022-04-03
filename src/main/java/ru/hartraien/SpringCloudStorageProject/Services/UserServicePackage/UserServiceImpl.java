@@ -1,10 +1,11 @@
-package ru.hartraien.SpringCloudStorageProject.Services;
+package ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.RoleRepository;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService
 {
+    private static final int DIR_LENGTH = 10;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -31,7 +33,7 @@ public class UserServiceImpl implements UserService
     @Override
     public void save( UserEntity user )
     {
-        if ( userNotExists( user ) )
+        if ( userNotInDB( user ) )
         {
             encodeAndAddUserRole( user );
             userRepository.save( user );
@@ -41,7 +43,9 @@ public class UserServiceImpl implements UserService
     private UserEntity encodeAndAddUserRole( UserEntity user )
     {
         user.setPassword( passwordEncoder.encode( user.getPassword() ) );
-        user.addRole( roleRepository.findRoleByName( "Role_User" ) );
+        Role role_user = roleRepository.findRoleByName( "Role_User" );
+        if ( role_user != null )
+            user.addRole( role_user );
         return user;
     }
 
@@ -58,13 +62,6 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public void saveAdmin( UserEntity user )
-    {
-        user.setPassword( passwordEncoder.encode( user.getPassword() ) );
-        userRepository.save( user );
-    }
-
-    @Override
     public Page<UserEntity> getAllUsersPaging( Pageable request )
     {
         return userRepository.findAll( request );
@@ -74,14 +71,14 @@ public class UserServiceImpl implements UserService
     public void saveAll( List<UserEntity> entities )
     {
         userRepository.saveAll(
-                entities.stream().filter( this::userNotExists )
+                entities.stream().filter( this::userNotInDB )
                         .distinct()
                         .map( this::encodeAndAddUserRole )
                         .collect( Collectors.toList() )
         );
     }
 
-    private boolean userNotExists( UserEntity user )
+    private boolean userNotInDB( UserEntity user )
     {
         return findByUsername( user.getUsername() ) == null;
     }

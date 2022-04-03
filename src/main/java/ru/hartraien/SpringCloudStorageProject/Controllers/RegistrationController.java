@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
-import ru.hartraien.SpringCloudStorageProject.Services.UserService;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 import ru.hartraien.SpringCloudStorageProject.Validators.UserValidator;
 
 @Controller

@@ -1,4 +1,4 @@
-package ru.hartraien.SpringCloudStorageProject.Services;
+package ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

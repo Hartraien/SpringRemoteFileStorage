@@ -6,7 +6,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
-import ru.hartraien.SpringCloudStorageProject.Services.UserService;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 @Component
 public class UserValidator implements Validator

@@ -1,4 +1,4 @@
-package ru.hartraien.SpringCloudStorageProject.Services;
+package ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +13,6 @@ public interface UserService
     UserEntity findByUsername( String username );
 
     List<UserEntity> getAllUsers();
-
-    void saveAdmin( UserEntity admin );
 
     Page<UserEntity> getAllUsersPaging( Pageable request );
 
