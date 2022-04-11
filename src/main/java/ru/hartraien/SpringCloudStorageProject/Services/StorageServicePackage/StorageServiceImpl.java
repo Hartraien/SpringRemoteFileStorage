@@ -1,19 +1,15 @@
 package ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage;
 
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
-import org.springframework.web.multipart.MultipartFile;
-import ru.hartraien.SpringCloudStorageProject.Entities.DirectoryEntity;
+import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -35,49 +31,43 @@ public class StorageServiceImpl implements StorageService
         FileSystemUtils.deleteRecursively( rootLocation.toFile() );
     }
 
-    @Override
-    public void uploadFile( MultipartFile file, DirectoryEntity dir )
+    private Path getUserRoot( String dir )
     {
-        Path userRoot = getUserRoot( dir );
-        try
-        {
-            if ( !file.isEmpty() )
-            {
-                Path destinationPath = userRoot.resolve( Paths.get( file.getOriginalFilename() ) )
-                        .normalize().toAbsolutePath();
-                if ( !destinationPath.getParent().equals( userRoot.toAbsolutePath() ) )
-                    return;
-                try ( InputStream inp = file.getInputStream() )
-                {
-                    Files.copy( inp, destinationPath, StandardCopyOption.REPLACE_EXISTING );
-                }
-            }
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
-        }
-    }
-
-    private Path getUserRoot( DirectoryEntity dir )
-    {
-        return rootLocation.resolve( dir.getDirname() );
+        return rootLocation.resolve( dir ).normalize();
     }
 
     @Override
-    public Stream<Path> getAllFilesFromDir( DirectoryEntity dir ) throws IOException
-    {
-        Path userRoot = getUserRoot( dir );
-        return Files.walk( userRoot, 1 )
-                .filter( path -> !path.equals( userRoot ) )
-                .map( this.rootLocation::relativize );
-    }
-
-    @Override
-    public void createDir( DirectoryEntity directory )
+    public void createDir( String directory )
     {
         Path dirPath = this.getUserRoot( directory );
         createDirForPath( dirPath );
+    }
+
+    @Override
+    public List<FileDTO> getAllFilesInDir( String dirname, String subPath )
+    {
+        Path relative = getUserRoot( dirname );
+        Path full = relative.resolve( subPath ).normalize();
+        if ( full.startsWith( relative ) )
+        {
+            try
+            {
+                return getFilesInPath( full )
+                        .map( path -> new FileDTO( path, relative ) )
+                        .collect( Collectors.toList() );
+            }
+            catch ( IOException e )
+            {
+                e.printStackTrace();
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    private Stream<Path> getFilesInPath( Path full ) throws IOException
+    {
+        return Files.walk( full, 1 )
+                .filter( path -> !full.equals( path ) );
     }
 
     private void createDirForPath( Path dirPath )
@@ -92,18 +82,4 @@ public class StorageServiceImpl implements StorageService
         }
     }
 
-    @Override
-    public Resource loadAsResource( String filename, DirectoryEntity dir )
-    {
-        Path file = getUserRoot( dir ).resolve( filename );
-        try
-        {
-            return new UrlResource( file.toUri() );
-        }
-        catch ( MalformedURLException e )
-        {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

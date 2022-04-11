@@ -18,9 +18,15 @@
             <tr>
                 <th>Filename</th>
             </tr>
+            <tr th:if="${backPath!=null}" >
+                <td>
+                    <a th:href="@{/uploadpage/{id} (id=${backPath})}" th:text="..">..</a>
+                </td>
+            </tr>
             <tr th:each="file: ${files}">
                 <td>
-                    <a th:href="@{/uploadpage/{id} (id=${file})}" th:text="${file}">File</a>
+                    <a th:if="${file.isDirectory()}" th:href="@{/uploadpage/{id} (id=${file.getRelPath()})}" th:text="${file.getFileName()}">File</a>
+                    <a th:if="${!file.isDirectory()}" th:href="@{/downloadFile/{id} (id=${file.getRelPath()})}" th:text="${file.getFileName()}">File</a>
                 </td>
             </tr>
         </table>

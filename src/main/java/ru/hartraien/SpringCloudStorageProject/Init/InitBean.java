@@ -1,13 +1,16 @@
 package ru.hartraien.SpringCloudStorageProject.Init;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
+import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +23,15 @@ public class InitBean
 {
     private final RoleService roleService;
     private final UserService userService;
+    private final StorageService storageService;
 
 
-    public InitBean( RoleService roleService, UserService userService )
+    @Autowired
+    public InitBean( RoleService roleService, UserService userService, StorageService storageService )
     {
         this.roleService = roleService;
         this.userService = userService;
+        this.storageService = storageService;
     }
 
     /**
@@ -50,7 +56,6 @@ public class InitBean
         userService.save( admin );
 
         int UserCount = 10;
-
 
         generateNRandomUsers( userRole, UserCount );
 
