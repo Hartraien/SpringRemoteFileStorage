@@ -1,9 +1,11 @@
 package ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 import ru.hartraien.SpringCloudStorageProject.Entities.DirectoryEntity;
+import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Init.RandomStringProducer;
 import ru.hartraien.SpringCloudStorageProject.Init.RandomStringProducerImpl;
 import ru.hartraien.SpringCloudStorageProject.Repositories.DirRepository;
@@ -46,6 +48,12 @@ public class DirServiceImpl implements DirService
     public List<FileDTO> getFilesInDir( DirectoryEntity directory, String subPath )
     {
         return storageService.getAllFilesInDir(directory.getDirname(), subPath);
+    }
+
+    @Override
+    public Resource getFile( UserEntity user, String filePath )
+    {
+        return storageService.getFile(user.getDir().getDirname(), filePath);
     }
 
 }

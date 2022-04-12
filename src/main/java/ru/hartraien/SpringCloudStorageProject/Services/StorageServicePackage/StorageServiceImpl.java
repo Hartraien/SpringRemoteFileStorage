@@ -1,10 +1,13 @@
 package ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -62,6 +65,27 @@ public class StorageServiceImpl implements StorageService
             }
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public Resource getFile( String dirname, String filePath )
+    {
+        Path relative = getUserRoot( dirname );
+        Path full = relative.resolve( filePath ).normalize();
+        if ( full.startsWith( relative ) )
+        {
+            try
+            {
+                Resource resource = new UrlResource( full.toUri() );
+                if ( resource.exists() || resource.isReadable() )
+                    return resource;
+            }
+            catch ( MalformedURLException e )
+            {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     private Stream<Path> getFilesInPath( Path full ) throws IOException
