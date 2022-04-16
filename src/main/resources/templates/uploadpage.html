@@ -20,12 +20,12 @@
             </tr>
             <tr th:if="${backPath!=null}" >
                 <td>
-                    <a th:href="@{/uploadpage/{id} (id=${backPath})}" th:text="..">..</a>
+                    <a th:href="@{/viewfiles/{id} (id=${backPath})}" th:text="..">..</a>
                 </td>
             </tr>
             <tr th:each="file: ${files}">
                 <td>
-                    <a th:if="${file.isDirectory()}" th:href="@{/uploadpage/{id} (id=${file.getRelPath()})}" th:text="${file.getFileName()}">File</a>
+                    <a th:if="${file.isDirectory()}" th:href="@{/viewfiles/{id} (id=${file.getRelPath()})}" th:text="${file.getFileName()}">File</a>
                     <a th:if="${!file.isDirectory()}" th:href="@{/download/{id} (id=${file.getRelPath()})}" th:text="${file.getFileName()}">File</a>
                 </td>
             </tr>

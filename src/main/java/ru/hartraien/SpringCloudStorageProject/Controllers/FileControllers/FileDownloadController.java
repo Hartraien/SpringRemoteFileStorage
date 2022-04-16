@@ -1,4 +1,4 @@
-package ru.hartraien.SpringCloudStorageProject.Controllers;
+package ru.hartraien.SpringCloudStorageProject.Controllers.FileControllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -15,22 +15,19 @@ import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 @Controller
 @RequestMapping("/download")
-public class FileLoadController
+public class FileDownloadController extends FileContollerAbstract
 {
-    private final UserRepository userRepository;
     private final DirService dirService;
-    private final String basePath = "/download/";
 
 
     @Autowired
-    public FileLoadController( UserRepository userRepository, DirService dirService )
+    public FileDownloadController( UserRepository userRepository, DirService dirService )
     {
-        this.userRepository = userRepository;
+        super( userRepository, FileDownloadController.class );
         this.dirService = dirService;
     }
 
@@ -51,20 +48,4 @@ public class FileLoadController
                 .body( file );
     }
 
-    private UserEntity getCurrentUser( Authentication authentication )
-    {
-        return userRepository.findUserByUsername( authentication.getName() );
-    }
-
-    private String getSubPath( HttpServletRequest request )
-    {
-        String[] parts = request.getRequestURL().toString().split( basePath, 2 );
-        if ( parts.length == 2 )
-        {
-            System.err.println( parts[1] );
-            return URLDecoder.decode( parts[1], StandardCharsets.UTF_8 );
-        }
-        else
-            return "";
-    }
 }
