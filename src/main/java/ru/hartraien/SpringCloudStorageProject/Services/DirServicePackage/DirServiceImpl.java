@@ -48,19 +48,19 @@ public class DirServiceImpl implements DirService
     @Override
     public List<FileDTO> getFilesInDir( DirectoryEntity directory, String subPath )
     {
-        return storageService.getAllFilesInDir(directory.getDirname(), subPath);
+        return storageService.getAllFilesInDir( directory.getDirname(), subPath );
     }
 
     @Override
     public Resource getFile( UserEntity user, String filePath )
     {
-        return storageService.getFile(user.getDir().getDirname(), filePath);
+        return storageService.getFile( user.getDir().getDirname(), filePath );
     }
 
     @Override
     public void storeFile( UserEntity user, String path, MultipartFile file )
     {
-        storageService.storeFile(user.getDir().getDirname(), path, file);
+        storageService.storeFile( user.getDir().getDirname(), path, file );
     }
 
 }

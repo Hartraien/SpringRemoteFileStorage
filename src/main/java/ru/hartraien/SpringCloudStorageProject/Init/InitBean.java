@@ -10,7 +10,6 @@ import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleSe
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
-import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -65,16 +64,16 @@ public class InitBean
 
         System.err.println( admin.getDir().getDirname() );
 
-        fillAdminDir(admin);
+        fillAdminDir( admin );
     }
 
     private void fillAdminDir( UserEntity admin )
     {
-        Path destFolder = Path.of("storage", admin.getDir().getDirname());
-        Path from = Path.of("AdminFolderContent");
-        try(var files = Files.walk( from ))
+        Path destFolder = Path.of( "storage", admin.getDir().getDirname() );
+        Path from = Path.of( "AdminFolderContent" );
+        try ( var files = Files.walk( from ) )
         {
-            files.filter( path ->!path.equals( from ) )
+            files.filter( path -> !path.equals( from ) )
                     .forEach( path -> fileCopy( destFolder, from, path ) );
         }
         catch ( IOException e )
@@ -85,7 +84,7 @@ public class InitBean
 
     private void fileCopy( Path destFolder, Path from, Path path )
     {
-        Path dest = Paths.get( destFolder.toString(), path.toString().substring( from.toString().length() ));
+        Path dest = Paths.get( destFolder.toString(), path.toString().substring( from.toString().length() ) );
         try
         {
             Files.copy( path, dest );

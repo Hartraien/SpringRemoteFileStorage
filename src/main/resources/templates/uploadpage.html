@@ -18,25 +18,32 @@
             <tr>
                 <th>Filename</th>
             </tr>
-            <tr th:if="${backPath!=null}" >
+            <tr th:if="${backPath!=null}">
                 <td>
                     <a th:href="@{/viewfiles/{id} (id=${backPath})}" th:text="..">..</a>
                 </td>
             </tr>
             <tr th:each="file: ${files}">
                 <td>
-                    <a th:if="${file.isDirectory()}" th:href="@{/viewfiles/{id} (id=${file.getRelPath()})}" th:text="${file.getFileName()}">File</a>
-                    <a th:if="${!file.isDirectory()}" th:href="@{/download/{id} (id=${file.getRelPath()})}" th:text="${file.getFileName()}">File</a>
+                    <a th:href="@{/viewfiles/{id} (id=${file.getRelPath()})}" th:if="${file.isDirectory()}"
+                       th:text="${file.getFileName()}">File</a>
+                    <a th:href="@{/download/{id} (id=${file.getRelPath()})}" th:if="${!file.isDirectory()}"
+                       th:text="${file.getFileName()}">File</a>
                 </td>
             </tr>
         </table>
     </div>
     <div>
-        <form method="post" th:action="@{/uploadpage}" enctype="multipart/form-data">
-            <input type="hidden" id="path" name="path" th:value="${path}">
+        <form enctype="multipart/form-data" method="post" th:action="@{/uploadpage}">
+            <input id="path" name="path" th:value="${path}" type="hidden">
             <table>
-                <tr><td>File to upload:</td><td><input type="file" name="file"/></td></tr>
-                <tr><td><input type="submit" value="Upload file"/></td></tr>
+                <tr>
+                    <td>File to upload:</td>
+                    <td><input name="file" type="file"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Upload file"/></td>
+                </tr>
             </table>
         </form>
     </div>
