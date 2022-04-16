@@ -18,14 +18,14 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/viewfiles")
-public class FileViewController extends  FileContollerAbstract
+public class FileViewController extends FileContollerAbstract
 {
     private final DirService dirService;
 
     @Autowired
     public FileViewController( UserRepository userRepository, DirService dirService )
     {
-        super( userRepository, FileViewController.class);
+        super( userRepository, FileViewController.class );
         this.dirService = dirService;
     }
 
@@ -39,6 +39,7 @@ public class FileViewController extends  FileContollerAbstract
         List<FileDTO> filesInDir = dirService.getFilesInDir( user.getDir(), subPath );
         model.addAttribute( "backPath", backPath );
         model.addAttribute( "files", filesInDir );
+        model.addAttribute( "path", subPath );
         return "uploadpage";
     }
 

@@ -4,12 +4,15 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
+import org.springframework.web.multipart.MultipartFile;
 import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,9 +58,11 @@ public class StorageServiceImpl implements StorageService
         {
             try
             {
-                return getFilesInPath( full )
-                        .map( path -> new FileDTO( path, relative ) )
-                        .collect( Collectors.toList() );
+                try ( var stream = getFilesInPath( full ) )
+                {
+                    return stream.map( path -> new FileDTO( path, relative ) )
+                            .collect( Collectors.toList() );
+                }
             }
             catch ( IOException e )
             {
@@ -86,6 +91,29 @@ public class StorageServiceImpl implements StorageService
             }
         }
         return null;
+    }
+
+    @Override
+    public void storeFile( String dirname, String subPath, MultipartFile file )
+    {
+        Path relative = getUserRoot( dirname );
+        Path full = relative.resolve( subPath ).normalize();
+        if ( full.startsWith( relative ) )
+        {
+            if ( file.isEmpty() )
+                return;
+            Path destinationFile = full.resolve( file.getOriginalFilename() ).normalize();
+            if ( !destinationFile.startsWith( full ) )
+                return;
+            try ( InputStream inputStream = file.getInputStream() )
+            {
+                Files.copy( inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING );
+            }
+            catch ( IOException e )
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     private Stream<Path> getFilesInPath( Path full ) throws IOException

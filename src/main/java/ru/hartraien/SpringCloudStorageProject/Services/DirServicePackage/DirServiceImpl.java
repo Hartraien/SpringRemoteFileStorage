@@ -3,6 +3,7 @@ package ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 import ru.hartraien.SpringCloudStorageProject.Entities.DirectoryEntity;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
@@ -54,6 +55,12 @@ public class DirServiceImpl implements DirService
     public Resource getFile( UserEntity user, String filePath )
     {
         return storageService.getFile(user.getDir().getDirname(), filePath);
+    }
+
+    @Override
+    public void storeFile( UserEntity user, String path, MultipartFile file )
+    {
+        storageService.storeFile(user.getDir().getDirname(), path, file);
     }
 
 }

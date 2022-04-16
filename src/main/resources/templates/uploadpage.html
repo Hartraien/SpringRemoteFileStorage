@@ -32,7 +32,8 @@
         </table>
     </div>
     <div>
-        <form method="post" action="/uploadpage" enctype="multipart/form-data">
+        <form method="post" th:action="@{/uploadpage}" enctype="multipart/form-data">
+            <input type="hidden" id="path" name="path" th:value="${path}">
             <table>
                 <tr><td>File to upload:</td><td><input type="file" name="file"/></td></tr>
                 <tr><td><input type="submit" value="Upload file"/></td></tr>
