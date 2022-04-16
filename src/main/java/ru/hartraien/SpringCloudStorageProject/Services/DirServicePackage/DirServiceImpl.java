@@ -63,4 +63,10 @@ public class DirServiceImpl implements DirService
         storageService.storeFile( user.getDir().getDirname(), path, file );
     }
 
+    @Override
+    public void createDir( UserEntity user, String path, String dirName )
+    {
+        storageService.createSubDir( user.getDir().getDirname(), path, dirName );
+    }
+
 }

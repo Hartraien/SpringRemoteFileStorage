@@ -35,7 +35,7 @@
     </div>
     <div>
         <form enctype="multipart/form-data" method="post" th:action="@{/uploadpage}">
-            <input id="path" name="path" th:value="${path}" type="hidden">
+            <input name="path" th:value="${path}" type="hidden">
             <table>
                 <tr>
                     <td>File to upload:</td>
@@ -43,6 +43,20 @@
                 </tr>
                 <tr>
                     <td><input type="submit" value="Upload file"/></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div>
+        <form method="post" th:action="@{/makedir}">
+            <input name="path" th:value="${path}" type="hidden">
+            <table>
+                <tr>
+                    <td>Name of new directory:</td>
+                    <td><input name="name" type="text" required="required" pattern="[A-Za-z0-9 ]{1,20}"/></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Create directory"/></td>
                 </tr>
             </table>
         </form>

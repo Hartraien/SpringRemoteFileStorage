@@ -6,29 +6,30 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 
 @Controller
-@RequestMapping("/uploadpage")
-public class FileUploadController extends AbstractFileController
+@RequestMapping("/makedir")
+public class DirMakerController extends AbstractFileController
 {
     private final DirService dirService;
 
     @Autowired
-    public FileUploadController( UserRepository userRepository, DirService dirService )
+    public DirMakerController( UserRepository userRepository, DirService dirService )
     {
-        super( userRepository, FileUploadController.class );
+        super( userRepository, DirMakerController.class );
         this.dirService = dirService;
     }
 
     @PostMapping("")
-    public String uploadFile( @RequestParam("file") MultipartFile file, @RequestParam("path") String path, Authentication authentication )
+    public String makeDir( @RequestParam("name") String dirName,
+                           @RequestParam("path") String path,
+                           Authentication authentication )
     {
         UserEntity user = getCurrentUser( authentication );
-        dirService.storeFile( user, path, file );
+        dirService.createDir( user, path, dirName );
         return "redirect:/viewfiles/" + path;
     }
 }

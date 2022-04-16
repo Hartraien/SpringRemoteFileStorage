@@ -17,7 +17,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/viewfiles")
-public class FileViewController extends FileContollerAbstract
+public class FileViewController extends AbstractFileController
 {
     private final DirService dirService;
 

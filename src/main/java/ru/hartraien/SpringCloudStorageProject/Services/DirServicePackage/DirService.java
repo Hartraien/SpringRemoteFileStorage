@@ -17,4 +17,6 @@ public interface DirService
     Resource getFile( UserEntity user, String filePath );
 
     void storeFile( UserEntity user, String path, MultipartFile file );
+
+    void createDir( UserEntity user, String path, String dirName );
 }

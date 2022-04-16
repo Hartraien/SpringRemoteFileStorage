@@ -116,6 +116,20 @@ public class StorageServiceImpl implements StorageService
         }
     }
 
+    @Override
+    public void createSubDir( String dirname, String subPath, String dirName )
+    {
+        Path relative = getUserRoot( dirname );
+        Path full = relative.resolve( subPath ).normalize();
+        if ( full.startsWith( relative ) )
+        {
+            Path newDir = full.resolve( dirName ).normalize();
+            if ( !newDir.startsWith( full ) )
+                return;
+            this.createDirForPath( newDir );
+        }
+    }
+
     private Stream<Path> getFilesInPath( Path full ) throws IOException
     {
         return Files.walk( full, 1 )

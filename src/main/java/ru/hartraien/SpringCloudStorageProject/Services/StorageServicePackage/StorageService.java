@@ -16,4 +16,6 @@ public interface StorageService
     Resource getFile( String dirname, String filePath );
 
     void storeFile( String dirname, String path, MultipartFile file );
+
+    void createSubDir( String dirname, String path, String dirName );
 }

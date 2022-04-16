@@ -10,12 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
-public class FileContollerAbstract
+public class AbstractFileController
 {
     private final UserRepository userRepository;
     private final String basePath;
 
-    public FileContollerAbstract( UserRepository userRepository, Class<? extends FileContollerAbstract> clazz )
+    public AbstractFileController( UserRepository userRepository, Class<? extends AbstractFileController> clazz )
     {
         this.userRepository = userRepository;
         this.basePath = AnnotationUtils.findAnnotation( clazz, RequestMapping.class ).path()[0] + "/";

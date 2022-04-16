@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 
 @Controller
 @RequestMapping("/download")
-public class FileDownloadController extends FileContollerAbstract
+public class FileDownloadController extends AbstractFileController
 {
     private final DirService dirService;
 
