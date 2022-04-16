@@ -1,13 +1,20 @@
 package ru.hartraien.SpringCloudStorageProject.Init;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
+import javax.annotation.PreDestroy;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +27,15 @@ public class InitBean
 {
     private final RoleService roleService;
     private final UserService userService;
+    private final StorageService storageService;
 
 
-    public InitBean( RoleService roleService, UserService userService )
+    @Autowired
+    public InitBean( RoleService roleService, UserService userService, StorageService storageService )
     {
         this.roleService = roleService;
         this.userService = userService;
+        this.storageService = storageService;
     }
 
     /**
@@ -51,10 +61,39 @@ public class InitBean
 
         int UserCount = 10;
 
-
         generateNRandomUsers( userRole, UserCount );
 
         System.err.println( admin.getDir().getDirname() );
+
+        fillAdminDir(admin);
+    }
+
+    private void fillAdminDir( UserEntity admin )
+    {
+        Path destFolder = Path.of("storage", admin.getDir().getDirname());
+        Path from = Path.of("AdminFolderContent");
+        try(var files = Files.walk( from ))
+        {
+            files.filter( path ->!path.equals( from ) )
+                    .forEach( path -> fileCopy( destFolder, from, path ) );
+        }
+        catch ( IOException e )
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void fileCopy( Path destFolder, Path from, Path path )
+    {
+        Path dest = Paths.get( destFolder.toString(), path.toString().substring( from.toString().length() ));
+        try
+        {
+            Files.copy( path, dest );
+        }
+        catch ( IOException e )
+        {
+            e.printStackTrace();
+        }
     }
 
     private UserEntity generateAdminUser( Role userRole, Role adminRole )
