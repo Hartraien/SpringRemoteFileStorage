@@ -11,8 +11,10 @@ import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
+import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.NoSuchDirectoryException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -35,7 +37,15 @@ public class FileViewController extends AbstractFileController
         System.err.println( "SubPath = " + subPath );
         String backPath = getBackPath( subPath );
         UserEntity user = getCurrentUser( authentication );
-        List<FileDTO> filesInDir = dirService.getFilesInDir( user.getDir(), subPath );
+        List<FileDTO> filesInDir;
+        try
+        {
+            filesInDir = dirService.getFilesInDir( user.getDir(), subPath );
+        }
+        catch ( NoSuchDirectoryException e )
+        {
+            filesInDir = Collections.emptyList();
+        }
         model.addAttribute( "backPath", backPath );
         model.addAttribute( "files", filesInDir );
         model.addAttribute( "path", subPath );

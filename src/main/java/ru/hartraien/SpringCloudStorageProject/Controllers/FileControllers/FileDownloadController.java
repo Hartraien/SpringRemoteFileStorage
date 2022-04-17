@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
+import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.NoSuchDirectoryException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
@@ -37,15 +38,23 @@ public class FileDownloadController extends AbstractFileController
     {
         UserEntity user = getCurrentUser( authentication );
         String filePath = getSubPath( request );
-        Resource file = dirService.getFile( user, filePath );
-        ContentDisposition contentDisposition = ContentDisposition.builder( "attachment" )
-                .filename( file != null ? file.getFilename() : "", StandardCharsets.UTF_8 )
-                .build();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentDisposition( contentDisposition );
-        return ResponseEntity.ok()
-                .headers( headers )
-                .body( file );
+        Resource file;
+        try
+        {
+            file = dirService.getFile( user.getDir(), filePath );
+            ContentDisposition contentDisposition = ContentDisposition.builder( "attachment" )
+                    .filename( file.getFilename(), StandardCharsets.UTF_8 )
+                    .build();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDisposition( contentDisposition );
+            return ResponseEntity.ok()
+                    .headers( headers )
+                    .body( file );
+        }
+        catch ( NoSuchDirectoryException e )
+        {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

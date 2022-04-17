@@ -6,9 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
+import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.NoSuchDirectoryException;
 
 @Controller
 @RequestMapping("/makedir")
@@ -26,10 +28,18 @@ public class DirMakerController extends AbstractFileController
     @PostMapping("")
     public String makeDir( @RequestParam("name") String dirName,
                            @RequestParam("path") String path,
-                           Authentication authentication )
+                           Authentication authentication,
+                           RedirectAttributes redirectAttributes )
     {
         UserEntity user = getCurrentUser( authentication );
-        dirService.createDir( user, path, dirName );
+        try
+        {
+            dirService.createDir( user.getDir(), path, dirName );
+        }
+        catch ( NoSuchDirectoryException e )
+        {
+            redirectAttributes.addAttribute( "error", e.getMessage() );
+        }
         return "redirect:/viewfiles/" + path;
     }
 }
