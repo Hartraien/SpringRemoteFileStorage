@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
+import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTOComparator;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,7 +59,7 @@ public class StorageServiceImpl implements StorageService
         {
             try ( var stream = getFilesInPath( full ) )
             {
-                return stream.map( path -> new FileDTO( path, relative ) )
+                return stream.map( path -> new FileDTO( path, relative ) ).sorted(new FileDTOComparator() )
                         .collect( Collectors.toList() );
             }
             catch ( IOException e )

@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
+import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTOComparator;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
