@@ -1,12 +1,10 @@
 package ru.hartraien.SpringCloudStorageProject.Entities;
 
-import org.apache.catalina.User;
-
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name="t_directory_entities")
+@Table(name = "t_directory_entities")
 public class DirectoryEntity
 {
     @Id

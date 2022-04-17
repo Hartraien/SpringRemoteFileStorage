@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 import ru.hartraien.SpringCloudStorageProject.Entities.DirectoryEntity;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Init.RandomStringProducer;
@@ -11,16 +12,14 @@ import ru.hartraien.SpringCloudStorageProject.Init.RandomStringProducerImpl;
 import ru.hartraien.SpringCloudStorageProject.Repositories.DirRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class DirServiceImpl implements DirService
 {
     private final DirRepository dirRepository;
     private final StorageService storageService;
+    private final int dirNameLength = 5;
 
     @Autowired
     public DirServiceImpl( DirRepository dirRepository, StorageService storageService )
@@ -30,47 +29,44 @@ public class DirServiceImpl implements DirService
     }
 
     @Override
-    public List<String> getFilesByUser( UserEntity user )
-    {
-        try ( var files = storageService.getAllFilesFromDir( user.getDir() ) )
-        {
-            return files
-                    .map( path -> path.getFileName().toString() )
-                    .collect( Collectors.toList() );
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-    @Override
-    public void uploadFile( MultipartFile file, UserEntity currentUser )
-    {
-        storageService.uploadFile( file, currentUser.getDir() );
-    }
-
-    @Override
     public DirectoryEntity generateNewDir()
     {
         RandomStringProducer randomStringProducer = new RandomStringProducerImpl();
         while ( true )
         {
-            String name = randomStringProducer.getString( 5 );
+            String name = randomStringProducer.getString( dirNameLength );
             if ( dirRepository.findByDirname( name ) == null )
             {
                 DirectoryEntity directoryEntity = new DirectoryEntity();
                 directoryEntity.setDirname( name );
-                storageService.createDir( directoryEntity );
+                storageService.createDir( directoryEntity.getDirname() );
                 return directoryEntity;
             }
         }
     }
 
     @Override
-    public Resource loadAsResource( String filename, UserEntity user )
+    public List<FileDTO> getFilesInDir( DirectoryEntity directory, String subPath )
     {
-        return storageService.loadAsResource( filename, user.getDir() );
+        return storageService.getAllFilesInDir( directory.getDirname(), subPath );
     }
+
+    @Override
+    public Resource getFile( UserEntity user, String filePath )
+    {
+        return storageService.getFile( user.getDir().getDirname(), filePath );
+    }
+
+    @Override
+    public void storeFile( UserEntity user, String path, MultipartFile file )
+    {
+        storageService.storeFile( user.getDir().getDirname(), path, file );
+    }
+
+    @Override
+    public void createDir( UserEntity user, String path, String dirName )
+    {
+        storageService.createSubDir( user.getDir().getDirname(), path, dirName );
+    }
+
 }
