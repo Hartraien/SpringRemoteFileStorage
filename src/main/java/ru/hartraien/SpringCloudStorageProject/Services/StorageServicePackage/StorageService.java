@@ -11,11 +11,11 @@ public interface StorageService
 
     void createDir( String directory );
 
-    List<FileDTO> getAllFilesInDir( String dirname, String subPath );
+    List<FileDTO> getAllFilesInDir( String dirname, String subPath ) throws StorageException;
 
-    Resource getFile( String dirname, String filePath );
+    Resource getFile( String dirname, String filePath ) throws StorageException;
 
-    void storeFile( String dirname, String path, MultipartFile file );
+    void storeFile( String dirname, String path, MultipartFile file ) throws StorageException;
 
-    void createSubDir( String dirname, String path, String dirName );
+    void createSubDir( String dirname, String path, String dirName ) throws StorageException;
 }

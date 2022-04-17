@@ -11,13 +11,13 @@ public interface DirService
 {
     DirectoryEntity generateNewDir();
 
-    List<FileDTO> getFilesInDir( DirectoryEntity directory, String subPath ) throws NoSuchDirectoryException;
+    List<FileDTO> getFilesInDir( DirectoryEntity directory, String subPath ) throws DirectoryException;
 
-    Resource getFile( DirectoryEntity directory, String filePath ) throws NoSuchDirectoryException;
+    Resource getFile( DirectoryEntity directory, String filePath ) throws DirectoryException;
 
-    void storeFile( DirectoryEntity directory, String path, MultipartFile file ) throws NoSuchDirectoryException;
+    void storeFile( DirectoryEntity directory, String path, MultipartFile file ) throws DirectoryException;
 
-    void createDir( DirectoryEntity directory, String path, String dirName ) throws NoSuchDirectoryException;
+    void createDir( DirectoryEntity directory, String path, String dirName ) throws DirectoryException;
 
     boolean dirExists( DirectoryEntity directory);
 }

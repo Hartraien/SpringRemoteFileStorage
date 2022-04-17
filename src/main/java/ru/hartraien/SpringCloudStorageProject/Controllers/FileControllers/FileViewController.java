@@ -11,7 +11,7 @@ import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
-import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.NoSuchDirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
@@ -42,7 +42,7 @@ public class FileViewController extends AbstractFileController
         {
             filesInDir = dirService.getFilesInDir( user.getDir(), subPath );
         }
-        catch ( NoSuchDirectoryException e )
+        catch ( DirectoryException e )
         {
             filesInDir = Collections.emptyList();
         }

@@ -13,7 +13,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,10 +21,11 @@ import java.util.stream.Stream;
 public class StorageServiceImpl implements StorageService
 {
     private final Path rootLocation;
+    private final String storage = "storage";
 
     public StorageServiceImpl()
     {
-        this.rootLocation = Path.of( "storage" );
+        this.rootLocation = Path.of( storage );
         if ( !Files.exists( this.rootLocation ) )
             createDirForPath( this.rootLocation );
         else
@@ -50,30 +50,28 @@ public class StorageServiceImpl implements StorageService
     }
 
     @Override
-    public List<FileDTO> getAllFilesInDir( String dirname, String subPath )
+    public List<FileDTO> getAllFilesInDir( String dirname, String subPath ) throws StorageException
     {
         Path relative = getUserRoot( dirname );
         Path full = relative.resolve( subPath ).normalize();
         if ( full.startsWith( relative ) )
         {
-            try
+            try ( var stream = getFilesInPath( full ) )
             {
-                try ( var stream = getFilesInPath( full ) )
-                {
-                    return stream.map( path -> new FileDTO( path, relative ) )
-                            .collect( Collectors.toList() );
-                }
+                return stream.map( path -> new FileDTO( path, relative ) )
+                        .collect( Collectors.toList() );
             }
             catch ( IOException e )
             {
-                e.printStackTrace();
+                throw new StorageException( "Could not parse subdirectory " + subPath, e );
             }
         }
-        return new ArrayList<>();
+        else
+            throw new StorageException( subPath + " is not a subdirectory of user folder" );
     }
 
     @Override
-    public Resource getFile( String dirname, String filePath )
+    public Resource getFile( String dirname, String filePath ) throws StorageException
     {
         Path relative = getUserRoot( dirname );
         Path full = relative.resolve( filePath ).normalize();
@@ -84,40 +82,44 @@ public class StorageServiceImpl implements StorageService
                 Resource resource = new UrlResource( full.toUri() );
                 if ( resource.exists() || resource.isReadable() )
                     return resource;
+                else throw new StorageException( "Resource is unaccessible" );
             }
             catch ( MalformedURLException e )
             {
-                e.printStackTrace();
+                throw new StorageException( "Coudl not get file", e );
             }
         }
-        return null;
+        else
+            throw new StorageException( filePath + " is not a subdirectory of user folder" );
     }
 
     @Override
-    public void storeFile( String dirname, String subPath, MultipartFile file )
+    public void storeFile( String dirname, String subPath, MultipartFile file ) throws StorageException
     {
         Path relative = getUserRoot( dirname );
         Path full = relative.resolve( subPath ).normalize();
         if ( full.startsWith( relative ) )
         {
             if ( file.isEmpty() )
-                return;
+                throw new StorageException( "File is empty" );
             Path destinationFile = full.resolve( file.getOriginalFilename() ).normalize();
             if ( !destinationFile.startsWith( full ) )
-                return;
+                throw new StorageException( "File " + file.getOriginalFilename() + " is not in directory " + subPath );
             try ( InputStream inputStream = file.getInputStream() )
             {
                 Files.copy( inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING );
             }
             catch ( IOException e )
             {
-                e.printStackTrace();
+                throw new StorageException( "Could not save file", e );
             }
         }
+        else
+            throw new StorageException( subPath + " is not a subdirectory of user's folder" );
     }
 
     @Override
-    public void createSubDir( String dirname, String subPath, String dirName )
+    public void createSubDir( String dirname, String subPath, String dirName ) throws StorageException
     {
         Path relative = getUserRoot( dirname );
         Path full = relative.resolve( subPath ).normalize();
@@ -125,9 +127,11 @@ public class StorageServiceImpl implements StorageService
         {
             Path newDir = full.resolve( dirName ).normalize();
             if ( !newDir.startsWith( full ) )
-                return;
+                throw new StorageException( "Directory " + dirName + " is not in directory " + subPath );
             this.createDirForPath( newDir );
         }
+        else
+            throw new StorageException( subPath + " is not a subdirectory of user's folder" );
     }
 
     private Stream<Path> getFilesInPath( Path full ) throws IOException

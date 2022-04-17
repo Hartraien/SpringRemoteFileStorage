@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
-import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.NoSuchDirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
@@ -51,7 +51,7 @@ public class FileDownloadController extends AbstractFileController
                     .headers( headers )
                     .body( file );
         }
-        catch ( NoSuchDirectoryException e )
+        catch ( DirectoryException e )
         {
             return ResponseEntity.notFound().build();
         }

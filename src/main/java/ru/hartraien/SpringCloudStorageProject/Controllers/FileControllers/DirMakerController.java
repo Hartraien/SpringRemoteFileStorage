@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
-import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.NoSuchDirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
 
 @Controller
 @RequestMapping("/makedir")
@@ -36,7 +36,7 @@ public class DirMakerController extends AbstractFileController
         {
             dirService.createDir( user.getDir(), path, dirName );
         }
-        catch ( NoSuchDirectoryException e )
+        catch ( DirectoryException e )
         {
             redirectAttributes.addAttribute( "error", e.getMessage() );
         }

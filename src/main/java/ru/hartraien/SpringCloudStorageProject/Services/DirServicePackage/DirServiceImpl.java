@@ -9,6 +9,7 @@ import ru.hartraien.SpringCloudStorageProject.Entities.DirectoryEntity;
 import ru.hartraien.SpringCloudStorageProject.Init.RandomStringProducer;
 import ru.hartraien.SpringCloudStorageProject.Init.RandomStringProducerImpl;
 import ru.hartraien.SpringCloudStorageProject.Repositories.DirRepository;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageException;
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 
 import java.util.List;
@@ -45,39 +46,75 @@ public class DirServiceImpl implements DirService
     }
 
     @Override
-    public List<FileDTO> getFilesInDir( DirectoryEntity directory, String subPath ) throws NoSuchDirectoryException
+    public List<FileDTO> getFilesInDir( DirectoryEntity directory, String subPath ) throws DirectoryException
     {
         if ( dirExists( directory ) )
-            return storageService.getAllFilesInDir( directory.getDirname(), subPath );
+        {
+            try
+            {
+                return storageService.getAllFilesInDir( directory.getDirname(), subPath );
+            }
+            catch ( StorageException e )
+            {
+                throw new DirectoryException( "Could not get files in dir", e );
+            }
+        }
         else
-            throw new NoSuchDirectoryException( "No such directory" );
+            throw new DirectoryException( "No such directory" );
     }
 
     @Override
-    public Resource getFile( DirectoryEntity directory, String filePath ) throws NoSuchDirectoryException
+    public Resource getFile( DirectoryEntity directory, String filePath ) throws DirectoryException
     {
         if ( dirExists( directory ) )
-            return storageService.getFile( directory.getDirname(), filePath );
+        {
+            try
+            {
+                return storageService.getFile( directory.getDirname(), filePath );
+            }
+            catch ( StorageException e )
+            {
+                throw new DirectoryException( "Could not get file", e );
+            }
+        }
         else
-            throw new NoSuchDirectoryException( "No such directory" );
+            throw new DirectoryException( "No such directory" );
     }
 
     @Override
-    public void storeFile( DirectoryEntity directory, String path, MultipartFile file ) throws NoSuchDirectoryException
+    public void storeFile( DirectoryEntity directory, String path, MultipartFile file ) throws DirectoryException
     {
         if ( dirExists( directory ) )
-            storageService.storeFile( directory.getDirname(), path, file );
+        {
+            try
+            {
+                storageService.storeFile( directory.getDirname(), path, file );
+            }
+            catch ( StorageException e )
+            {
+                throw new DirectoryException( "Could not store file", e );
+            }
+        }
         else
-            throw new NoSuchDirectoryException( "No such directory" );
+            throw new DirectoryException( "No such directory" );
     }
 
     @Override
-    public void createDir( DirectoryEntity directory, String path, String dirName ) throws NoSuchDirectoryException
+    public void createDir( DirectoryEntity directory, String path, String dirName ) throws DirectoryException
     {
         if ( dirExists( directory ) )
-            storageService.createSubDir( directory.getDirname(), path, dirName );
+        {
+            try
+            {
+                storageService.createSubDir( directory.getDirname(), path, dirName );
+            }
+            catch ( StorageException e )
+            {
+                throw new DirectoryException( "Could not get create subdirectory", e );
+            }
+        }
         else
-            throw new NoSuchDirectoryException( "No such directory" );
+            throw new DirectoryException( "No such directory" );
     }
 
 
