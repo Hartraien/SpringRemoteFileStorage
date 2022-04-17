@@ -17,13 +17,11 @@ import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.Directo
 @RequestMapping("/uploadpage")
 public class FileUploadController extends AbstractFileController
 {
-    private final DirService dirService;
 
     @Autowired
     public FileUploadController( UserRepository userRepository, DirService dirService )
     {
-        super( userRepository, FileUploadController.class );
-        this.dirService = dirService;
+        super( userRepository, dirService, FileUploadController.class );
     }
 
     @PostMapping("")
@@ -32,7 +30,7 @@ public class FileUploadController extends AbstractFileController
         UserEntity user = getCurrentUser( authentication );
         try
         {
-            dirService.storeFile( user.getDir(), path, file );
+            getDirService().storeFile( user.getDir(), path, file );
         }
         catch ( DirectoryException e )
         {

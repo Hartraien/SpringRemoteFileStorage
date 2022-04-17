@@ -18,4 +18,6 @@ public interface StorageService
     void storeFile( String dirname, String path, MultipartFile file ) throws StorageException;
 
     void createSubDir( String dirname, String path, String dirName ) throws StorageException;
+
+    void delete( String dirname, String pathToFile ) throws StorageException;
 }

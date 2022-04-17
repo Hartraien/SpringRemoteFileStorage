@@ -13,26 +13,25 @@ import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirServ
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
 
 @Controller
-@RequestMapping("/makedir")
-public class DirMakerController extends AbstractFileController
+@RequestMapping("/delete")
+public class FileDeleteController extends AbstractFileController
 {
-
     @Autowired
-    public DirMakerController( UserRepository userRepository, DirService dirService )
+    public FileDeleteController( UserRepository userRepository, DirService dirService )
     {
-        super( userRepository, dirService, DirMakerController.class );
+        super( userRepository, dirService, FileDeleteController.class );
     }
 
-    @PostMapping("")
-    public String makeDir( @RequestParam("name") String dirName,
-                           @RequestParam("path") String path,
-                           Authentication authentication,
-                           RedirectAttributes redirectAttributes )
+    @PostMapping
+    public String deleteFile( @RequestParam("pathToFile") String pathToFile,
+                              @RequestParam("redirectPath") String path,
+                              RedirectAttributes redirectAttributes,
+                              Authentication authentication )
     {
         UserEntity user = getCurrentUser( authentication );
         try
         {
-            getDirService().createDir( user.getDir(), path, dirName );
+            getDirService().delete( user.getDir(), pathToFile );
         }
         catch ( DirectoryException e )
         {

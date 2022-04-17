@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
-import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTOComparator;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
@@ -22,13 +21,11 @@ import java.util.List;
 @RequestMapping("/viewfiles")
 public class FileViewController extends AbstractFileController
 {
-    private final DirService dirService;
 
     @Autowired
     public FileViewController( UserRepository userRepository, DirService dirService )
     {
-        super( userRepository, FileViewController.class );
-        this.dirService = dirService;
+        super( userRepository, dirService, FileViewController.class );
     }
 
     @GetMapping("/**")
@@ -41,7 +38,7 @@ public class FileViewController extends AbstractFileController
         List<FileDTO> filesInDir;
         try
         {
-            filesInDir = dirService.getFilesInDir( user.getDir(), subPath );
+            filesInDir = getDirService().getFilesInDir( user.getDir(), subPath );
         }
         catch ( DirectoryException e )
         {

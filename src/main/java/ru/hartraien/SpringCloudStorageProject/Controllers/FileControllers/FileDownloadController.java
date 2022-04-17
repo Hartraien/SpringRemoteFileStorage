@@ -22,14 +22,11 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/download")
 public class FileDownloadController extends AbstractFileController
 {
-    private final DirService dirService;
-
 
     @Autowired
     public FileDownloadController( UserRepository userRepository, DirService dirService )
     {
-        super( userRepository, FileDownloadController.class );
-        this.dirService = dirService;
+        super( userRepository, dirService, FileDownloadController.class );
     }
 
     @GetMapping("/**")
@@ -41,7 +38,7 @@ public class FileDownloadController extends AbstractFileController
         Resource file;
         try
         {
-            file = dirService.getFile( user.getDir(), filePath );
+            file = getDirService().getFile( user.getDir(), filePath );
             ContentDisposition contentDisposition = ContentDisposition.builder( "attachment" )
                     .filename( file.getFilename(), StandardCharsets.UTF_8 )
                     .build();

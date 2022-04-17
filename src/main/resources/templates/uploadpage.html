@@ -29,6 +29,11 @@
                        th:text="${file.getFileName()}">File</a>
                     <a th:href="@{/download/{id} (id=${file.getRelPath()})}" th:if="${!file.isDirectory()}"
                        th:text="${file.getFileName()}">File</a>
+                    <form method="post" th:action="@{/delete}">
+                        <input type="hidden" name="pathToFile" th:value="${file.getRelPath()}">
+                        <input type="hidden" name="redirectPath" th:value="${path}">
+                        <input type="submit" value="Delete">
+                    </form>
                 </td>
             </tr>
         </table>

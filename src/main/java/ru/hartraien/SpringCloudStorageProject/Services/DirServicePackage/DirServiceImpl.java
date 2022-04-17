@@ -20,6 +20,7 @@ public class DirServiceImpl implements DirService
     private final DirRepository dirRepository;
     private final StorageService storageService;
     private final int dirNameLength = 5;
+    private final String mainDirExceptionMessage = "No main directory for current user";
 
     @Autowired
     public DirServiceImpl( DirRepository dirRepository, StorageService storageService )
@@ -60,7 +61,7 @@ public class DirServiceImpl implements DirService
             }
         }
         else
-            throw new DirectoryException( "No such directory" );
+            throw new DirectoryException( mainDirExceptionMessage );
     }
 
     @Override
@@ -78,7 +79,7 @@ public class DirServiceImpl implements DirService
             }
         }
         else
-            throw new DirectoryException( "No such directory" );
+            throw new DirectoryException( mainDirExceptionMessage );
     }
 
     @Override
@@ -96,7 +97,7 @@ public class DirServiceImpl implements DirService
             }
         }
         else
-            throw new DirectoryException( "No such directory" );
+            throw new DirectoryException( mainDirExceptionMessage );
     }
 
     @Override
@@ -114,7 +115,7 @@ public class DirServiceImpl implements DirService
             }
         }
         else
-            throw new DirectoryException( "No such directory" );
+            throw new DirectoryException( mainDirExceptionMessage );
     }
 
 
@@ -122,6 +123,24 @@ public class DirServiceImpl implements DirService
     public boolean dirExists( DirectoryEntity directory )
     {
         return dirRepository.findByDirname( directory.getDirname() ) != null;
+    }
+
+    @Override
+    public void delete( DirectoryEntity dir, String pathToFile ) throws DirectoryException
+    {
+        if ( dirExists( dir ) )
+        {
+            try
+            {
+                storageService.delete( dir.getDirname(), pathToFile );
+            }
+            catch ( StorageException e )
+            {
+                throw new DirectoryException( "Could not delete", e );
+            }
+        }
+        else
+            throw new DirectoryException( mainDirExceptionMessage );
     }
 
 }

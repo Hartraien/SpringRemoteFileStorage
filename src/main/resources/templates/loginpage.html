@@ -29,8 +29,5 @@
         </form>
         <a th:href="@{/register}">Register</a><br>
     </div>
-    <div sec:authorize="hasAuthority('Role_Admin')">
-        <a th:href="@{/userlist}">List of existing users</a>
-    </div>
 </body>
 </html>

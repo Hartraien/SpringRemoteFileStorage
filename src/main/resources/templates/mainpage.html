@@ -11,5 +11,8 @@
     <div sec:authorize="isAuthenticated()">
         <a th:href="@{/viewfiles}"> View files</a>
     </div>
+    <div sec:authorize="hasAuthority('Role_Admin')">
+        <a th:href="@{/userlist}">List of existing users</a>
+    </div>
 </body>
 </html>

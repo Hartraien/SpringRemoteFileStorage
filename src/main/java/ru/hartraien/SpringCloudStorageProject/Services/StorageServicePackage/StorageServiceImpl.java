@@ -59,7 +59,7 @@ public class StorageServiceImpl implements StorageService
         {
             try ( var stream = getFilesInPath( full ) )
             {
-                return stream.map( path -> new FileDTO( path, relative ) ).sorted(new FileDTOComparator() )
+                return stream.map( path -> new FileDTO( path, relative ) ).sorted( new FileDTOComparator() )
                         .collect( Collectors.toList() );
             }
             catch ( IOException e )
@@ -133,6 +133,31 @@ public class StorageServiceImpl implements StorageService
         }
         else
             throw new StorageException( subPath + " is not a subdirectory of user's folder" );
+    }
+
+    @Override
+    public void delete( String dirname, String pathToFile ) throws StorageException
+    {
+        Path relative = getUserRoot( dirname );
+        Path full = relative.resolve( pathToFile ).normalize();
+        if ( full.startsWith( relative ) )
+        {
+            if ( !Files.exists( full ) )
+                throw new StorageException( "No such file" );
+            try
+            {
+                if ( Files.isDirectory( full ) )
+                    FileSystemUtils.deleteRecursively( full );
+                else
+                    Files.delete( full );
+            }
+            catch ( IOException e )
+            {
+                throw new StorageException( "Could not delete file", e );
+            }
+        }
+        else
+            throw new StorageException( pathToFile + " is not in directory" );
     }
 
     private Stream<Path> getFilesInPath( Path full ) throws IOException
