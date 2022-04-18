@@ -16,6 +16,7 @@ import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirServ
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 @Controller
@@ -40,7 +41,7 @@ public class FileDownloadController extends AbstractFileController
         {
             file = getDirService().getFile( user.getDir(), filePath );
             ContentDisposition contentDisposition = ContentDisposition.builder( "attachment" )
-                    .filename( file.getFilename(), StandardCharsets.UTF_8 )
+                    .filename( URLDecoder.decode( file.getFilename() , StandardCharsets.UTF_8), StandardCharsets.UTF_8 )
                     .build();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentDisposition( contentDisposition );
