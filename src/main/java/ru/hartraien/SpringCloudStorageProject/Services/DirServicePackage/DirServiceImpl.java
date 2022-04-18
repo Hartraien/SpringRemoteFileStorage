@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 import ru.hartraien.SpringCloudStorageProject.Entities.DirectoryEntity;
-import ru.hartraien.SpringCloudStorageProject.Init.RandomStringProducer;
-import ru.hartraien.SpringCloudStorageProject.Init.RandomStringProducerImpl;
+import ru.hartraien.SpringCloudStorageProject.Utility.StringProducer;
+import ru.hartraien.SpringCloudStorageProject.Utility.RandomStringProducer;
 import ru.hartraien.SpringCloudStorageProject.Repositories.DirRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageException;
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
@@ -32,10 +32,10 @@ public class DirServiceImpl implements DirService
     @Override
     public DirectoryEntity generateNewDir()
     {
-        RandomStringProducer randomStringProducer = new RandomStringProducerImpl();
+        StringProducer stringProducer = new RandomStringProducer();
         while ( true )
         {
-            String name = randomStringProducer.getString( dirNameLength );
+            String name = stringProducer.getString( dirNameLength );
             if ( dirRepository.findByDirname( name ) == null )
             {
                 DirectoryEntity directoryEntity = new DirectoryEntity();

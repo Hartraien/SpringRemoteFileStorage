@@ -45,6 +45,6 @@ public class RegistrationController
 
         userService.save( userForm );
 
-        return "redirect:/lockedpage";
+        return "redirect:/";
     }
 }

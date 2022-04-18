@@ -9,6 +9,8 @@ import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
+import ru.hartraien.SpringCloudStorageProject.Utility.StringProducer;
+import ru.hartraien.SpringCloudStorageProject.Utility.RandomStringProducer;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -107,13 +109,13 @@ public class InitBean
 
     private void generateNRandomUsers( Role userRole, int UserCount )
     {
-        RandomStringProducer randomStringProducer = new RandomStringProducerImpl();
+        StringProducer stringProducer = new RandomStringProducer();
         List<UserEntity> entities = new ArrayList<>( UserCount );
         for ( int i = 0; i < UserCount; i++ )
         {
             UserEntity userEntity = new UserEntity();
-            userEntity.setUsername( randomStringProducer.getString( 5 ) );
-            userEntity.setPassword( randomStringProducer.getString( 5 ) );
+            userEntity.setUsername( stringProducer.getString( 5 ) );
+            userEntity.setPassword( stringProducer.getString( 5 ) );
             userEntity.addRole( userRole );
             entities.add( userEntity );
         }

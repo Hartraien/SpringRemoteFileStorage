@@ -1,8 +1,8 @@
-package ru.hartraien.SpringCloudStorageProject.Init;
+package ru.hartraien.SpringCloudStorageProject.Utility;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class RandomStringProducerImpl implements RandomStringProducer
+public class RandomStringProducer implements StringProducer
 {
     private final static int LEFT_LIMIT = 97; // letter 'a'
     private final static int RIGHT_LIMIT = 122; // letter 'z'
