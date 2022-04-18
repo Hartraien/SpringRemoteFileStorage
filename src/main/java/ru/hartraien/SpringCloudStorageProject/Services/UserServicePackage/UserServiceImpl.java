@@ -10,6 +10,7 @@ import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.RoleRepository;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
+import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +48,15 @@ public class UserServiceImpl implements UserService
     {
         user.setPassword( passwordEncoder.encode( user.getPassword() ) );
         Role role_user = roleRepository.findRoleByName( "Role_User" );
-        user.setDir( dirService.generateNewDir() );
+        try
+        {
+            user.setDir( dirService.generateNewDir() );
+        }
+        catch ( DirectoryException e )
+        {
+            //TODO add logger and UserService Exception
+            throw new RuntimeException( e );
+        }
         if ( role_user != null )
             user.addRole( role_user );
         return user;

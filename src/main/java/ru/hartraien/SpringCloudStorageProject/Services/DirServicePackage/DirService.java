@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface DirService
 {
-    DirectoryEntity generateNewDir();
+    DirectoryEntity generateNewDir() throws DirectoryException;
 
     List<FileDTO> getFilesInDir( DirectoryEntity directory, String subPath ) throws DirectoryException;
 

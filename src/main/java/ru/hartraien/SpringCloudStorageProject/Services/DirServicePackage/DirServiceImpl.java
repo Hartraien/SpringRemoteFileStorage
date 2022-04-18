@@ -30,7 +30,7 @@ public class DirServiceImpl implements DirService
     }
 
     @Override
-    public DirectoryEntity generateNewDir()
+    public DirectoryEntity generateNewDir() throws DirectoryException
     {
         StringProducer stringProducer = new RandomStringProducer();
         while ( true )
@@ -40,8 +40,15 @@ public class DirServiceImpl implements DirService
             {
                 DirectoryEntity directoryEntity = new DirectoryEntity();
                 directoryEntity.setDirname( name );
-                storageService.createDir( directoryEntity.getDirname() );
-                return directoryEntity;
+                try
+                {
+                    storageService.createDir( directoryEntity.getDirname() );
+                    return directoryEntity;
+                }
+                catch ( StorageException e )
+                {
+                    throw new DirectoryException("Could not create directory ", e );
+                }
             }
         }
     }
