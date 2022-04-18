@@ -1,5 +1,6 @@
 package ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,11 @@ import java.util.stream.Stream;
 public class StorageServiceImpl implements StorageService
 {
     private final Path rootLocation;
-    private final String storage = "storage";
+    private final String storage;
 
-    public StorageServiceImpl()
+    public StorageServiceImpl(@Value( "storage" ) String storageValue) throws StorageException
     {
+        storage = storageValue;
         this.rootLocation = Path.of( storage );
         if ( !Files.exists( this.rootLocation ) )
             createDirForPath( this.rootLocation );
@@ -44,7 +46,7 @@ public class StorageServiceImpl implements StorageService
     }
 
     @Override
-    public void createDir( String directory )
+    public void createDir( String directory ) throws StorageException
     {
         Path dirPath = this.getUserRoot( directory );
         createDirForPath( dirPath );
@@ -166,7 +168,7 @@ public class StorageServiceImpl implements StorageService
                 .filter( path -> !full.equals( path ) );
     }
 
-    private void createDirForPath( Path dirPath )
+    private void createDirForPath( Path dirPath ) throws StorageException
     {
         try
         {
@@ -174,7 +176,7 @@ public class StorageServiceImpl implements StorageService
         }
         catch ( IOException e )
         {
-            e.printStackTrace();
+            throw new StorageException("Could not create dir for " + dirPath);
         }
     }
 

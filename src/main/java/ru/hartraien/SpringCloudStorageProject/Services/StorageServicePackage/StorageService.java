@@ -9,7 +9,7 @@ import java.util.List;
 public interface StorageService
 {
 
-    void createDir( String directory );
+    void createDir( String directory ) throws StorageException;
 
     List<FileDTO> getAllFilesInDir( String dirname, String subPath ) throws StorageException;
 
