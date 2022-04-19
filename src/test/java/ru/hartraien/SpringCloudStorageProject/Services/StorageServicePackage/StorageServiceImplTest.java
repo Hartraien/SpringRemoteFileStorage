@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.FileSystemUtils;
+import org.springframework.web.multipart.MultipartFile;
 import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 import ru.hartraien.SpringCloudStorageProject.Utility.RandomStringProducer;
 import ru.hartraien.SpringCloudStorageProject.Utility.StringProducer;
@@ -51,32 +53,15 @@ class StorageServiceImplTest
     @Test
     void createDir()
     {
-        StringProducer stringProducer = new RandomStringProducer();
-        String dirName = stringProducer.getString( 10 );
-        try
-        {
-            storageService.createDir( dirName );
-        }
-        catch ( StorageException e )
-        {
-            Assertions.fail( "Could not create dir " + e.getMessage() );
-        }
+        String dirName = createRandomNewDirInStorage();
         Assertions.assertTrue( Files.exists( Path.of( storageName, dirName ) ) );
     }
 
     @Test
     void getAllFilesInDir()
     {
+        String dirName = createRandomNewDirInStorage();
         StringProducer stringProducer = new RandomStringProducer();
-        String dirName = stringProducer.getString( 10 );
-        try
-        {
-            storageService.createDir( dirName );
-        }
-        catch ( StorageException e )
-        {
-            Assertions.fail( "Could not create dir " + e.getMessage() );
-        }
         List<String> filenames = new ArrayList<>();
         Path dirPath = Path.of( storageName, dirName );
         for ( int i = 0; i < 5; i++ )
@@ -110,11 +95,10 @@ class StorageServiceImplTest
         }
     }
 
-    @Test
-    void getFile()
+    private String createRandomNewDirInStorage()
     {
-        StringProducer stringProducer = new RandomStringProducer();
-        String dirName = stringProducer.getString( 10 );
+        StringProducer stringProducer1 = new RandomStringProducer();
+        String dirName = stringProducer1.getString( 10 );
         try
         {
             storageService.createDir( dirName );
@@ -123,12 +107,27 @@ class StorageServiceImplTest
         {
             Assertions.fail( "Could not create dir " + e.getMessage() );
         }
-        String filename = generateRandomFileInDir( dirName );
+        return dirName;
+    }
+
+    @Test
+    void getFile()
+    {
+        String dirName = createRandomNewDirInStorage();
+        String filename = null;
+        try
+        {
+            filename = generateRandomFileInDir( dirName );
+        }
+        catch ( IOException e )
+        {
+            Assertions.fail( "Could not create random file in dir: " + e.getMessage() );
+        }
         try
         {
             Resource file = storageService.getFile( dirName, filename );
             Assertions.assertEquals( file.getFilename(), filename );
-            Assertions.assertTrue( compareFiles( file.getFile(), Path.of( storageName,dirName, filename ).toFile() ) );
+            Assertions.assertTrue( compareFiles( file.getFile(), Path.of( storageName, dirName, filename ).toFile() ) );
         }
         catch ( StorageException e )
         {
@@ -162,44 +161,115 @@ class StorageServiceImplTest
                     return false;
             }
         }
-        catch ( IOException e )
-        {
-            throw e;
-        }
         return true;
     }
 
-    private String generateRandomFileInDir( String dirName )
+    private String generateRandomFileInDir( String dirName ) throws IOException
     {
-        StringProducer stringProducer =new RandomStringProducer();
+        StringProducer stringProducer = new RandomStringProducer();
         String filename = stringProducer.getString( 10 );
-        String content = stringProducer.getString( ThreadLocalRandom.current().nextInt(1, 1000) );
+        String content = stringProducer.getString( ThreadLocalRandom.current().nextInt( 1, 1000 ) );
         Path filePath = Path.of( storageName, dirName, filename );
-        try
-        {
-            Files.createFile( filePath );
-            Files.write( filePath, content.getBytes( StandardCharsets.UTF_8 ) );
-        }
-        catch ( IOException e )
-        {
-            //TODO add normal exception thrown
-            throw new RuntimeException( e );
-        }
+        Files.createFile( filePath );
+        Files.write( filePath, content.getBytes( StandardCharsets.UTF_8 ) );
         return filename;
     }
 
     @Test
     void storeFile()
     {
+        String dirname = createRandomNewDirInStorage();
+        String filename = "file that does not exists.txt";
+        String content = new RandomStringProducer().getString( ThreadLocalRandom.current().nextInt( 1, 1000 ) );
+        MultipartFile file = new MockMultipartFile( filename, filename, "text/plain", content.getBytes( StandardCharsets.UTF_8 ) );
+        try
+        {
+            storageService.storeFile( dirname, "", file );
+        }
+        catch ( StorageException e )
+        {
+            Assertions.fail( "Could not store file: " + e.getMessage() );
+        }
+        Assertions.assertTrue( fileExists( dirname, file.getOriginalFilename() ) );
     }
 
     @Test
     void createSubDir()
     {
+        String dirname = createRandomNewDirInStorage();
+        String subDirName = new RandomStringProducer().getString( 10 );
+        try
+        {
+            storageService.createSubDir( dirname, "", subDirName );
+        }
+        catch ( StorageException e )
+        {
+            Assertions.fail( "Could not create subdirectory: " + e.getMessage() );
+        }
+        Assertions.assertTrue( fileExists( dirname, subDirName ) );
+    }
+
+    private boolean fileExists( String dirname, String subDirName )
+    {
+        return Files.exists( Path.of( storageName, dirname, subDirName ) );
     }
 
     @Test
-    void delete()
+    void deleteFile()
     {
+        String dirname = createRandomNewDirInStorage();
+        String filename = "file that does not exists.txt";
+        String content = new RandomStringProducer().getString( ThreadLocalRandom.current().nextInt( 1, 1000 ) );
+        MultipartFile file = new MockMultipartFile( filename, filename, "text/plain", content.getBytes( StandardCharsets.UTF_8 ) );
+        try
+        {
+            storageService.storeFile( dirname, "", file );
+        }
+        catch ( StorageException e )
+        {
+            Assertions.fail( "Could not store file: " + e.getMessage() );
+        }
+
+        Assertions.assertTrue( fileExists( dirname, filename ) );
+
+        try
+        {
+            storageService.delete( dirname, file.getOriginalFilename() );
+        }
+        catch ( StorageException e )
+        {
+            Assertions.fail( "Could not delete files in folder:" + e.getMessage() );
+        }
+
+        Assertions.assertFalse( fileExists( dirname, filename ) );
+    }
+
+    @Test
+    void deleteFolder()
+    {
+        String dirname = createRandomNewDirInStorage();
+        String subDirName = new RandomStringProducer().getString( 10 );
+        try
+        {
+            storageService.createSubDir( dirname, "", subDirName );
+        }
+        catch ( StorageException e )
+        {
+            Assertions.fail( "Could not create subdirectory: " + e.getMessage() );
+        }
+
+        Assertions.assertTrue( fileExists( dirname, subDirName ) );
+
+        try
+        {
+            storageService.delete( dirname, subDirName );
+        }
+        catch ( StorageException e )
+        {
+            Assertions.fail( "Could not delete files in folder:" + e.getMessage() );
+        }
+
+        Assertions.assertFalse( fileExists( dirname, subDirName ) );
+
     }
 }
