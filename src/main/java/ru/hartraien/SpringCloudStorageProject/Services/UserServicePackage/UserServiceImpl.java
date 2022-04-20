@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService
 {
-    private static final int DIR_LENGTH = 10;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final DirService dirService;
