@@ -7,10 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
-import ru.hartraien.SpringCloudStorageProject.Repositories.RoleRepository;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService
 {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final RoleService roleRepository;
     private final DirService dirService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl( UserRepository userRepository, RoleRepository roleRepository, DirService dirService, PasswordEncoder passwordEncoder )
+    public UserServiceImpl( UserRepository userRepository, RoleService roleRepository, DirService dirService, PasswordEncoder passwordEncoder )
     {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;

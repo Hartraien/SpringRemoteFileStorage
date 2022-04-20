@@ -15,6 +15,7 @@ import ru.hartraien.SpringCloudStorageProject.Repositories.RoleRepository;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
 import ru.hartraien.SpringCloudStorageProject.Utility.RandomStringProducer;
 import ru.hartraien.SpringCloudStorageProject.Utility.StringProducer;
 
@@ -26,7 +27,7 @@ class UserServiceImplTest
 {
     private PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
-    private RoleRepository roleRepository;
+    private RoleService roleRepository;
     private DirService dirService;
 
     private UserService userService;
@@ -36,7 +37,7 @@ class UserServiceImplTest
     {
         passwordEncoder = Mockito.mock( PasswordEncoder.class );
         userRepository = Mockito.mock( UserRepository.class );
-        roleRepository = Mockito.mock( RoleRepository.class );
+        roleRepository = Mockito.mock( RoleService.class );
         dirService = Mockito.mock( DirService.class );
         userService = new UserServiceImpl( userRepository, roleRepository, dirService, passwordEncoder );
     }
