@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
+import ru.hartraien.SpringCloudStorageProject.Services.SecurityServicePackage.SecurityService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 import ru.hartraien.SpringCloudStorageProject.Validators.UserValidator;
 
@@ -18,12 +19,14 @@ public class RegistrationController
 {
     private final UserValidator userValidator;
     private final UserService userService;
+    private final SecurityService securityService;
 
     @Autowired
-    public RegistrationController( UserValidator userValidator, UserService userService )
+    public RegistrationController( UserValidator userValidator, UserService userService, SecurityService securityService )
     {
         this.userValidator = userValidator;
         this.userService = userService;
+        this.securityService = securityService;
     }
 
     @GetMapping
@@ -44,6 +47,8 @@ public class RegistrationController
         }
 
         userService.save( userForm );
+
+        securityService.autologin( userForm.getUsername(), userForm.getPassword() );
 
         return "redirect:/";
     }
