@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserService
 {
-    void save( UserEntity user );
+    void save( UserEntity user ) throws UserServiceException;
 
     UserEntity findByUsername( String username );
 

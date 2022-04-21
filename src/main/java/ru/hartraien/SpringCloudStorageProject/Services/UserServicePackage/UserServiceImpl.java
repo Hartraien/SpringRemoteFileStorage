@@ -13,6 +13,7 @@ import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.Directo
 import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,16 +35,18 @@ public class UserServiceImpl implements UserService
 
 
     @Override
-    public void save( UserEntity user )
+    public void save( UserEntity user ) throws UserServiceException
     {
         if ( userNotInDB( user ) )
         {
             processUser( user );
             userRepository.save( user );
         }
+        else
+            throw new UserServiceException("User " + user.getUsername() + " already exists");
     }
 
-    private UserEntity processUser( UserEntity user )
+    private void processUser( UserEntity user ) throws UserServiceException
     {
         user.setPassword( passwordEncoder.encode( user.getPassword() ) );
         Role role_user = roleRepository.findRoleByName( "Role_User" );
@@ -54,10 +57,22 @@ public class UserServiceImpl implements UserService
         catch ( DirectoryException e )
         {
             //TODO add logger and UserService Exception
-            throw new RuntimeException( e );
+            throw new UserServiceException("Could not create directory for user", e );
         }
         if ( role_user != null )
             user.addRole( role_user );
+    }
+
+    private UserEntity processUserAndReturnOrNull(UserEntity user)
+    {
+        try
+        {
+            processUser( user );
+        }
+        catch ( UserServiceException e )
+        {
+            return null;
+        }
         return user;
     }
 
@@ -82,12 +97,12 @@ public class UserServiceImpl implements UserService
     @Override
     public void saveAll( List<UserEntity> entities )
     {
-        userRepository.saveAll(
-                entities.stream().filter( this::userNotInDB )
-                        .distinct()
-                        .map( this::processUser )
-                        .collect( Collectors.toList() )
-        );
+            List<UserEntity> users = entities.stream().filter( this::userNotInDB )
+                    .distinct()
+                    .map( this::processUserAndReturnOrNull )
+                    .filter( Objects::nonNull )
+                    .collect( Collectors.toList() );
+            userRepository.saveAll(users);
     }
 
     private boolean userNotInDB( UserEntity user )

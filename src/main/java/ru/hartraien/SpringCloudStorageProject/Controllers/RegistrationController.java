@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Services.SecurityServicePackage.SecurityService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserServiceException;
 import ru.hartraien.SpringCloudStorageProject.Validators.UserValidator;
 
 @Controller
@@ -46,7 +47,15 @@ public class RegistrationController
             return "register";
         }
 
-        userService.save( userForm );
+        try
+        {
+            userService.save( userForm );
+        }
+        catch ( UserServiceException e )
+        {
+            //TODO add error attribute
+            return "register";
+        }
 
         securityService.autologin( userForm.getUsername(), userForm.getPassword() );
 

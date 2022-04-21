@@ -79,7 +79,14 @@ class UserServiceImplTest
             Assertions.fail( "Could not mock dirService: " + e.getMessage() );
         }
 
-        userService.save( user );
+        try
+        {
+            userService.save( user );
+        }
+        catch ( UserServiceException e )
+        {
+            Assertions.fail("Could not save user: " +e.getMessage());
+        }
 
         Mockito.verify( userRepository ).save( user );
         Mockito.verify( userRepository ).findUserByUsername( username );

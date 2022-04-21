@@ -9,6 +9,7 @@ import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserServiceException;
 import ru.hartraien.SpringCloudStorageProject.Utility.StringProducer;
 import ru.hartraien.SpringCloudStorageProject.Utility.RandomStringProducer;
 
@@ -58,7 +59,15 @@ public class InitBean
         roleService.save( adminRole );
 
         UserEntity admin = generateAdminUser( userRole, adminRole );
-        userService.save( admin );
+        try
+        {
+            userService.save( admin );
+        }
+        catch ( UserServiceException e )
+        {
+            //TODO exception handling
+            throw new RuntimeException( e );
+        }
 
         int UserCount = 10;
 
