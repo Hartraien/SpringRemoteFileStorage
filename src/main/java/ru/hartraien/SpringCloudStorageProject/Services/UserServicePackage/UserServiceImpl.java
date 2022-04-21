@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
@@ -17,24 +18,26 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService
 {
     private final UserRepository userRepository;
-    private final RoleService roleRepository;
+    private final RoleService roleService;
     private final DirService dirService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl( UserRepository userRepository, RoleService roleRepository, DirService dirService, PasswordEncoder passwordEncoder )
+    public UserServiceImpl( UserRepository userRepository, RoleService roleService, DirService dirService, PasswordEncoder passwordEncoder )
     {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
         this.dirService = dirService;
         this.passwordEncoder = passwordEncoder;
     }
 
 
     @Override
+    @Transactional
     public void save( UserEntity user ) throws UserServiceException
     {
         if ( userNotInDB( user ) )
@@ -49,7 +52,7 @@ public class UserServiceImpl implements UserService
     private void processUser( UserEntity user ) throws UserServiceException
     {
         user.setPassword( passwordEncoder.encode( user.getPassword() ) );
-        Role role_user = roleRepository.findRoleByName( "Role_User" );
+        Role role_user = roleService.findRoleByName( "Role_User" );
         try
         {
             user.setDir( dirService.generateNewDir() );
@@ -95,6 +98,7 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
+    @Transactional
     public void saveAll( List<UserEntity> entities )
     {
             List<UserEntity> users = entities.stream().filter( this::userNotInDB )

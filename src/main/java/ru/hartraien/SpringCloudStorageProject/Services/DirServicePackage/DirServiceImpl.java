@@ -3,6 +3,7 @@ package ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 import ru.hartraien.SpringCloudStorageProject.Entities.DirectoryEntity;
@@ -30,6 +31,7 @@ public class DirServiceImpl implements DirService
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DirectoryEntity generateNewDir() throws DirectoryException
     {
         StringProducer stringProducer = new RandomStringProducer();
@@ -127,6 +129,7 @@ public class DirServiceImpl implements DirService
 
 
     @Override
+    @Transactional(readOnly = true)
     public boolean dirExists( DirectoryEntity directory )
     {
         return dirRepository.findByDirname( directory.getDirname() ) != null;
