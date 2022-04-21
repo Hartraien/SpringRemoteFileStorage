@@ -15,6 +15,7 @@
     <description>Cloud storage</description>
     <properties>
         <java.version>11</java.version>
+        <start-class>ru.hartraien.SpringCloudStorageProject.SpringCloudStorageProjectApplication</start-class>
     </properties>
 
 

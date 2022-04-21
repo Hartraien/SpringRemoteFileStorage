@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="htpp://www.thymeleaf.org">
+<head th:insert="fragments/header.html :: header(title='footer')"></head>
+<body>
+    <footer
+            class="text-center text-lg-start bg-light text-muted"
+            th:fragment="footer">
+        <p>
+            Author: Sidorov Alexander<br>
+            <a th:href="@{/}">Main Page</a>
+        </p>
+    </footer>
+</body>
+</html>

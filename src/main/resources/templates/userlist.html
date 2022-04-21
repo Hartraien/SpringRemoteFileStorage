@@ -7,20 +7,26 @@
     <h1>List of registered users</h1>
     <form method="get" th:action="@{/userlist}">
         <input id="pageNew" name="page" type="hidden" value="0">
-        <label for="sizeNew">pageSize</label>
+        <label for="sizeNew">Page size</label>
         <input id="sizeNew" name="size" th:value="${users.getSize()}" type="number">
-        <input type="submit" value="Get new paging">
+        <button type="submit" class="btn btn-secondary">New paging</button>
     </form>
-    <table>
-        <tr>
-            <th>Id</th>
-            <th>Username</th>
-        </tr>
-        <tr th:each="user: ${users.getContent()}">
-            <td th:text="${user.getId()}"></td>
-            <td th:text="${user.getUsername()}"></td>
-        </tr>
-    </table>
+    <div class="container">
+        <table class="table">
+            <thead class="thead-black">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Username</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user: ${users.getContent()}">
+                <td th:text="${user.getId()}"></td>
+                <td th:text="${user.getUsername()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <span style="float:left;">
         <form method="get" th:action="@{/userlist}" th:if="${users.getNumber()>1}">
             <input id="pageFirst" name="page" th:value="0" type="hidden">
@@ -49,5 +55,7 @@
             <input type="submit" value="Last page">
         </form>
     </span>
+
+    <footer th:insert="fragments/footer.html"></footer>
 </body>
 </html>
