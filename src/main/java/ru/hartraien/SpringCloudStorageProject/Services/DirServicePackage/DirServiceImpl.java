@@ -16,6 +16,7 @@ import ru.hartraien.SpringCloudStorageProject.Utility.StringProducer;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class DirServiceImpl implements DirService
 {
     private final DirRepository dirRepository;
@@ -31,7 +32,6 @@ public class DirServiceImpl implements DirService
     }
 
     @Override
-    @Transactional(readOnly = true)
     public DirectoryEntity generateNewDir() throws DirectoryException
     {
         StringProducer stringProducer = new RandomStringProducer();
@@ -129,7 +129,6 @@ public class DirServiceImpl implements DirService
 
 
     @Override
-    @Transactional(readOnly = true)
     public boolean dirExists( DirectoryEntity directory )
     {
         return dirRepository.findByDirname( directory.getDirname() ) != null;

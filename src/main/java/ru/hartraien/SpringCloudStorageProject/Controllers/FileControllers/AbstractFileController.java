@@ -4,8 +4,8 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
-import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
@@ -14,12 +14,12 @@ import java.nio.charset.StandardCharsets;
 public class AbstractFileController
 {
     private final DirService dirService;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final String basePath;
 
-    public AbstractFileController( UserRepository userRepository, DirService dirService, Class<? extends AbstractFileController> clazz )
+    public AbstractFileController( UserService userService, DirService dirService, Class<? extends AbstractFileController> clazz )
     {
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.dirService = dirService;
         this.basePath = getBasePath( clazz );
     }
@@ -36,7 +36,7 @@ public class AbstractFileController
 
     protected UserEntity getCurrentUser( Authentication authentication )
     {
-        return userRepository.findUserByUsername( authentication.getName() );
+        return userService.findByUsername( authentication.getName() );
     }
 
     protected String getSubPath( HttpServletRequest request )

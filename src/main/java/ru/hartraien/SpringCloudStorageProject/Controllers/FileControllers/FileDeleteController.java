@@ -11,13 +11,14 @@ import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 @Controller
 @RequestMapping("/delete")
 public class FileDeleteController extends AbstractFileController
 {
     @Autowired
-    public FileDeleteController( UserRepository userRepository, DirService dirService )
+    public FileDeleteController( UserService userRepository, DirService dirService )
     {
         super( userRepository, dirService, FileDeleteController.class );
     }

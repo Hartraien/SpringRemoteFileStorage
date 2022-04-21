@@ -12,6 +12,7 @@ import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 @Controller
 @RequestMapping("/uploadpage")
@@ -19,7 +20,7 @@ public class FileUploadController extends AbstractFileController
 {
 
     @Autowired
-    public FileUploadController( UserRepository userRepository, DirService dirService )
+    public FileUploadController( UserService userRepository, DirService dirService )
     {
         super( userRepository, dirService, FileUploadController.class );
     }

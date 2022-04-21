@@ -4,9 +4,7 @@
         xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
         xmlns:th="http://www.thymeleaf.org"
 >
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<head th:insert="fragments/header.html :: header(title='Registration')">
 </head>
 <body>
     <p th:if="${error_message}" th:text="${error_message}"></p>

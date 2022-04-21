@@ -11,6 +11,7 @@ import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 @Controller
 @RequestMapping("/makedir")
@@ -18,7 +19,7 @@ public class DirMakerController extends AbstractFileController
 {
 
     @Autowired
-    public DirMakerController( UserRepository userRepository, DirService dirService )
+    public DirMakerController( UserService userRepository, DirService dirService )
     {
         super( userRepository, dirService, DirMakerController.class );
     }

@@ -14,6 +14,7 @@ import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
@@ -25,7 +26,7 @@ public class FileDownloadController extends AbstractFileController
 {
 
     @Autowired
-    public FileDownloadController( UserRepository userRepository, DirService dirService )
+    public FileDownloadController( UserService userRepository, DirService dirService )
     {
         super( userRepository, dirService, FileDownloadController.class );
     }

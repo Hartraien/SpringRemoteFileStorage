@@ -3,9 +3,7 @@
         lang="en"
         xmlns:th="http://www.thymeleaf.org"
 >
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<head th:insert="fragments/header.html :: header(title='Error page')">
 </head>
 <body>
     <p>Something is wrong</p>

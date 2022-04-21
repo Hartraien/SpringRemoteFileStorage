@@ -12,6 +12,7 @@ import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
@@ -23,7 +24,7 @@ public class FileViewController extends AbstractFileController
 {
 
     @Autowired
-    public FileViewController( UserRepository userRepository, DirService dirService )
+    public FileViewController( UserService userRepository, DirService dirService )
     {
         super( userRepository, dirService, FileViewController.class );
     }
