@@ -22,10 +22,10 @@ import java.util.List;
 
 class DirServiceImplTest
 {
+    private final String storageName = "testStorage";
     private DirRepository dirRepository;
     private StorageService storageService;
     private DirService dirService;
-    private final String storageName = "testStorage";
 
     @BeforeEach
     void init()

@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.hartraien.SpringCloudStorageProject.Entities.DirectoryEntity;
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
-import ru.hartraien.SpringCloudStorageProject.Repositories.RoleRepository;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
@@ -85,7 +84,7 @@ class UserServiceImplTest
         }
         catch ( UserServiceException e )
         {
-            Assertions.fail("Could not save user: " +e.getMessage());
+            Assertions.fail( "Could not save user: " + e.getMessage() );
         }
 
         Mockito.verify( userRepository ).save( user );

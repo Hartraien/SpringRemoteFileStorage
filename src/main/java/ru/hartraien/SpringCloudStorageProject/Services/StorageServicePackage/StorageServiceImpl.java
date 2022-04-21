@@ -25,7 +25,7 @@ public class StorageServiceImpl implements StorageService
     private final Path rootLocation;
     private final String storage;
 
-    public StorageServiceImpl(@Value( "storage" ) String storageValue) throws StorageException
+    public StorageServiceImpl( @Value("storage") String storageValue ) throws StorageException
     {
         storage = storageValue;
         this.rootLocation = Path.of( storage );
@@ -176,7 +176,7 @@ public class StorageServiceImpl implements StorageService
         }
         catch ( IOException e )
         {
-            throw new StorageException("Could not create dir for " + dirPath);
+            throw new StorageException( "Could not create dir for " + dirPath );
         }
     }
 

@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService
             userRepository.save( user );
         }
         else
-            throw new UserServiceException("User " + user.getUsername() + " already exists");
+            throw new UserServiceException( "User " + user.getUsername() + " already exists" );
     }
 
     private void processUser( UserEntity user ) throws UserServiceException
@@ -60,13 +60,13 @@ public class UserServiceImpl implements UserService
         catch ( DirectoryException e )
         {
             //TODO add logger and UserService Exception
-            throw new UserServiceException("Could not create directory for user", e );
+            throw new UserServiceException( "Could not create directory for user", e );
         }
         if ( role_user != null )
             user.addRole( role_user );
     }
 
-    private UserEntity processUserAndReturnOrNull(UserEntity user)
+    private UserEntity processUserAndReturnOrNull( UserEntity user )
     {
         try
         {
@@ -101,12 +101,12 @@ public class UserServiceImpl implements UserService
     @Transactional
     public void saveAll( List<UserEntity> entities )
     {
-            List<UserEntity> users = entities.stream().filter( this::userNotInDB )
-                    .distinct()
-                    .map( this::processUserAndReturnOrNull )
-                    .filter( Objects::nonNull )
-                    .collect( Collectors.toList() );
-            userRepository.saveAll(users);
+        List<UserEntity> users = entities.stream().filter( this::userNotInDB )
+                .distinct()
+                .map( this::processUserAndReturnOrNull )
+                .filter( Objects::nonNull )
+                .collect( Collectors.toList() );
+        userRepository.saveAll( users );
     }
 
     private boolean userNotInDB( UserEntity user )

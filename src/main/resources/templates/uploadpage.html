@@ -30,8 +30,8 @@
                     <a th:href="@{/download/{id} (id=${file.getRelPath()})}" th:if="${!file.isDirectory()}"
                        th:text="${file.getFileName()}">File</a>
                     <form method="post" th:action="@{/delete}">
-                        <input type="hidden" name="pathToFile" th:value="${file.getRelPath()}">
-                        <input type="hidden" name="redirectPath" th:value="${path}">
+                        <input name="pathToFile" th:value="${file.getRelPath()}" type="hidden">
+                        <input name="redirectPath" th:value="${path}" type="hidden">
                         <input type="submit" value="Delete">
                     </form>
                 </td>
@@ -58,7 +58,7 @@
             <table>
                 <tr>
                     <td>Name of new directory:</td>
-                    <td><input name="name" type="text" required="required" pattern="[A-Za-z0-9 ]{1,20}"/></td>
+                    <td><input name="name" pattern="[A-Za-z0-9 ]{1,20}" required="required" type="text"/></td>
                 </tr>
                 <tr>
                     <td><input type="submit" value="Create directory"/></td>

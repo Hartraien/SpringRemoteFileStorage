@@ -19,7 +19,7 @@ public interface DirService
 
     void createDir( DirectoryEntity directory, String path, String dirName ) throws DirectoryException;
 
-    boolean dirExists( DirectoryEntity directory);
+    boolean dirExists( DirectoryEntity directory );
 
     void delete( DirectoryEntity dir, String pathToFile ) throws DirectoryException;
 }

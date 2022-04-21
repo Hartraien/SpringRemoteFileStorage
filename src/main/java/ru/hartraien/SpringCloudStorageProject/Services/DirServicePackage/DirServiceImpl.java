@@ -7,11 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 import ru.hartraien.SpringCloudStorageProject.Entities.DirectoryEntity;
-import ru.hartraien.SpringCloudStorageProject.Utility.StringProducer;
-import ru.hartraien.SpringCloudStorageProject.Utility.RandomStringProducer;
 import ru.hartraien.SpringCloudStorageProject.Repositories.DirRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageException;
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
+import ru.hartraien.SpringCloudStorageProject.Utility.RandomStringProducer;
+import ru.hartraien.SpringCloudStorageProject.Utility.StringProducer;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class DirServiceImpl implements DirService
                 }
                 catch ( StorageException e )
                 {
-                    throw new DirectoryException("Could not create directory ", e );
+                    throw new DirectoryException( "Could not create directory ", e );
                 }
             }
         }

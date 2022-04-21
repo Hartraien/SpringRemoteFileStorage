@@ -27,9 +27,8 @@ import java.util.stream.Collectors;
 
 class StorageServiceImplTest
 {
-    private StorageService storageService;
-
     private final String storageName = "testStorage";
+    private StorageService storageService;
 
     @BeforeEach
     void beforeEach() throws StorageException
