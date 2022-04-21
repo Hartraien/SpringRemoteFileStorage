@@ -26,7 +26,7 @@ class UserServiceImplTest
 {
     private PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
-    private RoleService roleRepository;
+    private RoleService roleService;
     private DirService dirService;
 
     private UserService userService;
@@ -36,9 +36,9 @@ class UserServiceImplTest
     {
         passwordEncoder = Mockito.mock( PasswordEncoder.class );
         userRepository = Mockito.mock( UserRepository.class );
-        roleRepository = Mockito.mock( RoleService.class );
+        roleService = Mockito.mock( RoleService.class );
         dirService = Mockito.mock( DirService.class );
-        userService = new UserServiceImpl( userRepository, roleRepository, dirService, passwordEncoder );
+        userService = new UserServiceImpl( userRepository, roleService, dirService, passwordEncoder );
     }
 
     @Test
@@ -68,7 +68,7 @@ class UserServiceImplTest
             return null;
         } );
         Mockito.when( passwordEncoder.encode( password ) ).thenReturn( encode_addition + password );
-        Mockito.when( roleRepository.findRoleByName( roleName ) ).thenReturn( role );
+        Mockito.when( roleService.findRoleByName( roleName ) ).thenReturn( role );
         try
         {
             Mockito.when( dirService.generateNewDir() ).thenReturn( directory );
@@ -89,7 +89,7 @@ class UserServiceImplTest
 
         Mockito.verify( userRepository ).save( user );
         Mockito.verify( userRepository ).findUserByUsername( username );
-        Mockito.verify( roleRepository ).findRoleByName( roleName );
+        Mockito.verify( roleService ).findRoleByName( roleName );
         Mockito.verify( passwordEncoder ).encode( password );
         try
         {
