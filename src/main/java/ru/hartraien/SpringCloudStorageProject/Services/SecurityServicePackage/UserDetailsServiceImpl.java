@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
-import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,18 +18,18 @@ import java.util.Set;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService
 {
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public UserDetailsServiceImpl( UserRepository userRepository )
+    public UserDetailsServiceImpl( UserService userService )
     {
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
     public UserDetails loadUserByUsername( String username ) throws UsernameNotFoundException
     {
-        final UserEntity userByUsername = userRepository.findUserByUsername( username );
+        final UserEntity userByUsername = userService.findByUsername( username );
         if ( userByUsername == null )
             throw new UsernameNotFoundException( username );
 

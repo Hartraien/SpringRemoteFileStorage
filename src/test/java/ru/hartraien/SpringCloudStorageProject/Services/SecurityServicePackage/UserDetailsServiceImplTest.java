@@ -9,19 +9,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
-import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
+import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 import java.util.stream.Collectors;
 
 class UserDetailsServiceImplTest
 {
-    private UserRepository userRepository;
+    private UserService userRepository;
     private UserDetailsService userDetailsService;
 
     @BeforeEach
     void init()
     {
-        userRepository = Mockito.mock( UserRepository.class );
+        userRepository = Mockito.mock( UserService.class );
         userDetailsService = new UserDetailsServiceImpl( userRepository );
     }
 
@@ -39,7 +39,7 @@ class UserDetailsServiceImplTest
         user.setPassword( password );
         user.addRole( role );
 
-        Mockito.when( userRepository.findUserByUsername( username ) ).thenReturn( user );
+        Mockito.when( userRepository.findByUsername( username ) ).thenReturn( user );
 
         UserDetails userFromService = userDetailsService.loadUserByUsername( username );
         Assertions.assertEquals( user.getUsername(), userFromService.getUsername() );
