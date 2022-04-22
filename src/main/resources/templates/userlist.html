@@ -4,14 +4,17 @@
 <head th:insert="fragments/header.html :: header(title='User list')">
 </head>
 <body>
-    <h1>List of registered users</h1>
-    <form method="get" th:action="@{/userlist}">
-        <input id="pageNew" name="page" type="hidden" value="0">
-        <label for="sizeNew">Page size</label>
-        <input id="sizeNew" name="size" th:value="${users.getSize()}" type="number">
-        <button type="submit" class="btn btn-secondary">New paging</button>
-    </form>
+    <nav th:insert="fragments/navigationbar.html :: navigation_bar"></nav>
+    <h1 class="text-center">List of users</h1>
     <div class="container">
+        <form class="col-lg-6 offset-lg-3 " method="get" th:action="@{/userlist}">
+            <div class="row justify-content-center">
+                <input id="pageNew" name="page" type="hidden" value="0">
+                <label for="sizeNew">Page size</label>
+                <input id="sizeNew" name="size" th:value="${users.getSize()}" type="number">
+                <button type="submit" class="btn btn-secondary">New paging</button>
+            </div>
+        </form>
         <table class="table">
             <thead class="thead-black">
             <tr>
@@ -26,35 +29,50 @@
             </tr>
             </tbody>
         </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination"
+                th:with="size=${users.getSize()}
+                , page=${users.getNumber()}
+                , totalPages=${users.getTotalPages()}
+                , hasPrev=${users.hasPrevious()}
+                , hasNext=${users.hasNext()}"
+            >
+                <li class="page-item" th:if="${page>1}"><a class="page-link" th:href="@{/userlist(page=0, size=${size})}">First</a></li>
+                <li class="page-item" th:if="${hasPrev}"><a class="page-link" th:href="@{/userlist(page=${page-1},size=${size})}" th:text="${page}">1</a></li>
+                <li class="page-item active"><a class="page-link" th:href="@{/userlist(page=${page}, size=${size})}" th:text="${page+1}">2</a></li>
+                <li class="page-item" th:if="${hasNext}"><a class="page-link" th:href="@{/userlist(page=${page+1}, size=${size})}" th:text="${page+2}">3</a></li>
+                <li class="page-item" th:if="${totalPages-page>2}"><a class="page-link" th:href="@{/userlist(page=${totalPages-1}, size=${size})}">Last</a></li>
+            </ul>
+        </nav>
+        <!--                <span style="float:left;">
+                        <form method="get" th:action="@{/userlist}" th:if="${users.getNumber()>1}">
+                            <input id="pageFirst" name="page" th:value="0" type="hidden">
+                            <input id="sizeFirst" name="size" th:value="${users.getSize()}" type="hidden">
+                            <input type="submit" value="First page">
+                        </form>
+                    </span>
+                        <span style="float:left;">
+                        <form method="get" th:action="@{/userlist}" th:if="${users.hasPrevious()}">
+                            <input id="pagePrev" name="page" th:value="${users.getNumber()-1}" type="hidden">
+                            <input id="sizePrev" name="size" th:value="${users.getSize()}" type="hidden">
+                            <input type="submit" value="Previous page">
+                        </form>
+                    </span>
+                        <span style="float:left;">
+                        <form method="get" th:action="@{/userlist}" th:if="${users.hasNext()}">
+                            <input id="pageNext" name="page" th:value="${users.getNumber()+1}" type="hidden">
+                            <input id="sizeNext" name="size" th:value="${users.getSize()}" type="hidden">
+                            <input type="submit" value="Next page">
+                        </form>
+                    </span>
+                        <span style="float:left;">
+                        <form method="get" th:action="@{/userlist}" th:if="${(users.getTotalPages() - users.getNumber())>2}">
+                            <input id="pageLast" name="page" th:value="${users.getTotalPages()-1}" type="hidden">
+                            <input id="sizeLast" name="size" th:value="${users.getSize()}" type="hidden">
+                            <input type="submit" value="Last page">
+                        </form>
+                    </span>-->
     </div>
-    <span style="float:left;">
-        <form method="get" th:action="@{/userlist}" th:if="${users.getNumber()>1}">
-            <input id="pageFirst" name="page" th:value="0" type="hidden">
-            <input id="sizeFirst" name="size" th:value="${users.getSize()}" type="hidden">
-            <input type="submit" value="First page">
-        </form>
-    </span>
-    <span style="float:left;">
-        <form method="get" th:action="@{/userlist}" th:if="${users.hasPrevious()}">
-            <input id="pagePrev" name="page" th:value="${users.getNumber()-1}" type="hidden">
-            <input id="sizePrev" name="size" th:value="${users.getSize()}" type="hidden">
-            <input type="submit" value="Previous page">
-        </form>
-    </span>
-    <span style="float:left;">
-        <form method="get" th:action="@{/userlist}" th:if="${users.hasNext()}">
-            <input id="pageNext" name="page" th:value="${users.getNumber()+1}" type="hidden">
-            <input id="sizeNext" name="size" th:value="${users.getSize()}" type="hidden">
-            <input type="submit" value="Next page">
-        </form>
-    </span>
-    <span style="float:left;">
-        <form method="get" th:action="@{/userlist}" th:if="${(users.getTotalPages() - users.getNumber())>2}">
-            <input id="pageLast" name="page" th:value="${users.getTotalPages()-1}" type="hidden">
-            <input id="sizeLast" name="size" th:value="${users.getSize()}" type="hidden">
-            <input type="submit" value="Last page">
-        </form>
-    </span>
 
     <footer th:insert="fragments/footer.html"></footer>
 </body>

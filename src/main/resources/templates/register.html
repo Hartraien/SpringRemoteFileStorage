@@ -7,6 +7,7 @@
 <head th:insert="fragments/header.html :: header(title='Registration')">
 </head>
 <body>
+    <nav th:insert="fragments/navigationbar.html"></nav>
     <p th:if="${error_message}" th:text="${error_message}"></p>
     <div sec:authorize="!isAuthenticated()">
         <form method="post" th:action="@{/register}" th:object="${userForm}">

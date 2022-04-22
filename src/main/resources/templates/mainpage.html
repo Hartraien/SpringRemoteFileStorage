@@ -4,6 +4,7 @@
 <head th:insert="fragments/header.html :: header(title='Main page')">
 </head>
 <body>
+    <nav th:insert="fragments/navigationbar.html"></nav>
     <h1>Hello!</h1>
     <a th:href="@{/login}">Login page</a>
     <div sec:authorize="isAuthenticated()">

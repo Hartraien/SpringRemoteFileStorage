@@ -7,6 +7,7 @@
 <head th:insert="fragments/header.html :: header(title='Login page')">
 </head>
 <body>
+    <nav th:insert="fragments/navigationbar.html"></nav>
     <p th:if="${message}" th:text="${message}"></p>
     <div sec:authorize="isAuthenticated()">
         <span sec:authentication="name">Username</span>
