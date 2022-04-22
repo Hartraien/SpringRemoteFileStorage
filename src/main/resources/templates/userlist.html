@@ -44,34 +44,6 @@
                 <li class="page-item" th:if="${totalPages-page>2}"><a class="page-link" th:href="@{/userlist(page=${totalPages-1}, size=${size})}">Last</a></li>
             </ul>
         </nav>
-        <!--                <span style="float:left;">
-                        <form method="get" th:action="@{/userlist}" th:if="${users.getNumber()>1}">
-                            <input id="pageFirst" name="page" th:value="0" type="hidden">
-                            <input id="sizeFirst" name="size" th:value="${users.getSize()}" type="hidden">
-                            <input type="submit" value="First page">
-                        </form>
-                    </span>
-                        <span style="float:left;">
-                        <form method="get" th:action="@{/userlist}" th:if="${users.hasPrevious()}">
-                            <input id="pagePrev" name="page" th:value="${users.getNumber()-1}" type="hidden">
-                            <input id="sizePrev" name="size" th:value="${users.getSize()}" type="hidden">
-                            <input type="submit" value="Previous page">
-                        </form>
-                    </span>
-                        <span style="float:left;">
-                        <form method="get" th:action="@{/userlist}" th:if="${users.hasNext()}">
-                            <input id="pageNext" name="page" th:value="${users.getNumber()+1}" type="hidden">
-                            <input id="sizeNext" name="size" th:value="${users.getSize()}" type="hidden">
-                            <input type="submit" value="Next page">
-                        </form>
-                    </span>
-                        <span style="float:left;">
-                        <form method="get" th:action="@{/userlist}" th:if="${(users.getTotalPages() - users.getNumber())>2}">
-                            <input id="pageLast" name="page" th:value="${users.getTotalPages()-1}" type="hidden">
-                            <input id="sizeLast" name="size" th:value="${users.getSize()}" type="hidden">
-                            <input type="submit" value="Last page">
-                        </form>
-                    </span>-->
     </div>
 
     <footer th:insert="fragments/footer.html"></footer>
