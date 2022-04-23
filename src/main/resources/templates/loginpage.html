@@ -7,26 +7,29 @@
 <head th:insert="fragments/header.html :: header(title='Login page')">
 </head>
 <body>
-    <nav th:insert="fragments/navigationbar.html"></nav>
-    <p th:if="${message}" th:text="${message}"></p>
-    <div sec:authorize="isAuthenticated()">
-        <span sec:authentication="name">Username</span>
-        <p th:each="authority : ${#authentication.getAuthorities()}"
-           th:text="${authority.getAuthority()}">
-        </p>
-        <form method="post" th:action="@{/logout}">
-            <input type="submit" value="Log out">
-        </form>
+    <nav th:insert="fragments/navigationbar.html :: navigation_bar"></nav>
+    <div class="container">
+        <p th:if="${message}" th:text="${message}"></p>
+        <div sec:authorize="isAuthenticated()">
+            <span sec:authentication="name">Username</span>
+            <p th:each="authority : ${#authentication.getAuthorities()}"
+               th:text="${authority.getAuthority()}">
+            </p>
+            <form method="post" th:action="@{/logout}">
+                <input type="submit" value="Log out">
+            </form>
+        </div>
+        <div sec:authorize="!isAuthenticated()">
+            <form method="post" th:action="@{/login}">
+                <label for="username">Username</label><br>
+                <input id="username" name="username" required type="text"><br>
+                <label for="password">Password</label><br>
+                <input id="password" name="password" type="text"><br>
+                <input type="submit" value="Log in">
+            </form>
+            <a th:href="@{/register}">Register</a><br>
+        </div>
     </div>
-    <div sec:authorize="!isAuthenticated()">
-        <form method="post" th:action="@{/login}">
-            <label for="username">Username</label><br>
-            <input id="username" name="username" required type="text"><br>
-            <label for="password">Password</label><br>
-            <input id="password" name="password" type="text"><br>
-            <input type="submit" value="Log in">
-        </form>
-        <a th:href="@{/register}">Register</a><br>
-    </div>
+    <footer th:insert="fragments/footer.html :: footer"></footer>
 </body>
 </html>

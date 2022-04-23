@@ -5,14 +5,15 @@
 </head>
 <body>
     <nav th:insert="fragments/navigationbar.html :: navigation_bar"></nav>
-    <h1 class="text-center">List of users</h1>
     <div class="container">
-        <form class="col-lg-6 offset-lg-3 " method="get" th:action="@{/userlist}">
+        <h1 class="text-center">List of users</h1>
+        <form class="col-lg-6 offset-lg-3" method="get" th:action="@{/userlist}">
             <div class="row justify-content-center">
                 <input id="pageNew" name="page" type="hidden" value="0">
-                <label for="sizeNew">Page size</label>
-                <input id="sizeNew" name="size" th:value="${users.getSize()}" type="number">
-                <button type="submit" class="btn btn-secondary">New paging</button>
+                <label for="sizeNew">Users per page</label>
+                <input id="sizeNew" min="1" name="size" oninput="validity.valid||(value='');" th:value="${users.getSize()}"
+                       type="number">
+                <button class="btn btn-secondary" type="submit">Display</button>
             </div>
         </form>
         <table class="table">
@@ -35,13 +36,22 @@
                 , page=${users.getNumber()}
                 , totalPages=${users.getTotalPages()}
                 , hasPrev=${users.hasPrevious()}
-                , hasNext=${users.hasNext()}"
-            >
-                <li class="page-item" th:if="${page>1}"><a class="page-link" th:href="@{/userlist(page=0, size=${size})}">First</a></li>
-                <li class="page-item" th:if="${hasPrev}"><a class="page-link" th:href="@{/userlist(page=${page-1},size=${size})}" th:text="${page}">1</a></li>
-                <li class="page-item active"><a class="page-link" th:href="@{/userlist(page=${page}, size=${size})}" th:text="${page+1}">2</a></li>
-                <li class="page-item" th:if="${hasNext}"><a class="page-link" th:href="@{/userlist(page=${page+1}, size=${size})}" th:text="${page+2}">3</a></li>
-                <li class="page-item" th:if="${totalPages-page>2}"><a class="page-link" th:href="@{/userlist(page=${totalPages-1}, size=${size})}">Last</a></li>
+                , hasNext=${users.hasNext()}">
+                <li class="page-item" th:if="${page>1}">
+                    <a class="page-link" th:href="@{/userlist(page=0, size=${size})}">First</a>
+                </li>
+                <li class="page-item" th:if="${hasPrev}">
+                    <a class="page-link" th:href="@{/userlist(page=${page-1},size=${size})}" th:text="${page}">1</a>
+                </li>
+                <li class="page-item active" th:if="${hasPrev || hasNext}">
+                    <a class="page-link" th:href="@{/userlist(page=${page}, size=${size})}" th:text="${page+1}">2</a>
+                </li>
+                <li class="page-item" th:if="${hasNext}">
+                    <a class="page-link" th:href="@{/userlist(page=${page+1}, size=${size})}" th:text="${page+2}">3</a>
+                </li>
+                <li class="page-item" th:if="${totalPages-page>2}">
+                    <a class="page-link" th:href="@{/userlist(page=${totalPages-1}, size=${size})}">Last</a>
+                </li>
             </ul>
         </nav>
     </div>

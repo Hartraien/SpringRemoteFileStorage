@@ -1,4 +1,4 @@
-package ru.hartraien.SpringCloudStorageProject.Controllers;
+package ru.hartraien.SpringCloudStorageProject.Controllers.UserControllers;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

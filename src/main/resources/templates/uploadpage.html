@@ -7,10 +7,10 @@
 >
 <head th:insert="fragments/header.html :: header(title='Files')"></head>
 <body>
-    <nav th:insert="fragments/navigationbar.html"></nav>
-    <h1 sec:authentication="name">Username</h1>
+    <nav th:insert="fragments/navigationbar.html :: navigation_bar"></nav>
 
     <div class="container">
+        <h1 class="text-center">File storage of <span sec:authentication="name">Username</span></h1>
         <table class="table">
             <thead class="thead-dark">
             <tr>
@@ -38,37 +38,36 @@
                     <form method="post" th:action="@{/delete}">
                         <input name="pathToFile" th:value="${file.getRelPath()}" type="hidden">
                         <input name="redirectPath" th:value="${path}" type="hidden">
-                        <button class="btn btn-warning"  type="submit" value="Delete">Delete</button>
+                        <button class="btn btn-warning" type="submit" value="Delete">Delete</button>
                     </form>
                 </td>
             </tr>
             </tbody>
         </table>
-    </div>
-    <div class="container">
-        <form enctype="multipart/form-data" method="post" th:action="@{/uploadpage}">
-            <input name="path" th:value="${path}" type="hidden">
-            <table>
-                <tr>
-                    <td>File to upload:</td>
-                </tr>
-                <tr>
-                    <td><input name="file" type="file"/></td>
-                    <td><button type="submit" class="btn btn-secondary">Upload file</button></td>
-                </tr>
-            </table>
-        </form>
-    </div>
-    <div class="container">
-        <form method="post" th:action="@{/makedir}">
+        <form class="col-lg-6 offset-lg-3" enctype="multipart/form-data" method="post" th:action="@{/uploadpage}">
             <input name="path" th:value="${path}" type="hidden">
             <table class="table">
                 <tr>
-                    <td>Name of new directory:</td>
+                    <td>Choose file to upload:</td>
+                    <td><input name="file" type="file"/></td>
+                    <td>
+                        <button class="btn btn-secondary" type="submit">Upload file</button>
+                    </td>
                 </tr>
+            </table>
+        </form>
+        <form class="col-lg-6 offset-lg-3" method="post" th:action="@{/makedir}">
+            <input name="path" th:value="${path}" type="hidden">
+            <table class="table">
                 <tr>
-                    <td><input class="form-control" name="name" pattern="[A-Za-z0-9 ]{1,20}" required="required" type="text"/></td>
-                    <td><button class="btn btn-secondary" type="submit" >Create directory</button></td>
+                    <td>Input name of new directory:</td>
+                    <td>
+                        <input class="form-control" name="name" pattern="[A-Za-z0-9 ]{1,20}" required="required"
+                               type="text"/>
+                    </td>
+                    <td>
+                        <button class="btn btn-secondary" type="submit">Create directory</button>
+                    </td>
                 </tr>
             </table>
         </form>

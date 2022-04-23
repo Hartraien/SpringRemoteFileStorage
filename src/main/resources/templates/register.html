@@ -7,20 +7,22 @@
 <head th:insert="fragments/header.html :: header(title='Registration')">
 </head>
 <body>
-    <nav th:insert="fragments/navigationbar.html"></nav>
-    <p th:if="${error_message}" th:text="${error_message}"></p>
-    <div sec:authorize="!isAuthenticated()">
-        <form method="post" th:action="@{/register}" th:object="${userForm}">
-            <label for="fusername">Username</label><br>
-            <input id="fusername" name="fusername" required th:field="*{username}" type="text"><br>
-            <label for="fpassword">Password</label><br>
-            <input id="fpassword" name="fpassword" required th:field="*{password}" type="text"><br>
-            <input type="submit" value="Register">
-        </form>
-    </div>
-    <a th:href="@{/login}">Login page</a><br>
-    <div sec:authorize="hasAuthority('Role_Admin')">
-        <a th:href="@{/userlist}">List of existing users</a>
+    <nav th:insert="fragments/navigationbar.html ::navigation_bar"></nav>
+    <div class="container">
+        <div sec:authorize="!isAuthenticated()">
+            <p th:if="${error_message}" th:text="${error_message}"></p>
+            <form method="post" th:action="@{/register}" th:object="${userForm}">
+                <label for="fusername">Username</label><br>
+                <input id="fusername" name="fusername" required th:field="*{username}" type="text"><br>
+                <label for="fpassword">Password</label><br>
+                <input id="fpassword" name="fpassword" required th:field="*{password}" type="text"><br>
+                <input type="submit" value="Register">
+            </form>
+        </div>
+        <a th:href="@{/login}">Login page</a><br>
+        <div sec:authorize="hasAuthority('Role_Admin')">
+            <a th:href="@{/userlist}">List of existing users</a>
+        </div>
     </div>
 </body>
 </html>

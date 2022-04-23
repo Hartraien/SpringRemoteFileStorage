@@ -1,4 +1,4 @@
-package ru.hartraien.SpringCloudStorageProject.Controllers;
+package ru.hartraien.SpringCloudStorageProject.Controllers.UserControllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

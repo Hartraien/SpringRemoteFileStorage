@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header.html :: header(title='User info')">
+</head>
+<body>
+    <nav th:insert="fragments/navigationbar.html :: navigation_bar"></nav>
+    <div class="container">
+        <p>Your user name = <span sec:authentication="name">Username</span></p>
+        <p sec:authorize="hasAuthority('Role_Admin')">Your roles: </p>
+        <p th:each="authority : ${#authentication.getAuthorities()}"
+           th:text="${authority.getAuthority()}">
+        </p>
+        <form method="post" th:action="@{/clearFolder}">
+            <button class="btn btn-danger" type="submit">Delete all my files</button>
+        </form>
+        <form method="post" th:action="@{/logout}">
+            <button class="btn btn-secondary" type="submit">Logout</button>
+        </form>
+    </div>
+    <footer th:insert="fragments/footer.html :: footer"></footer>
+</body>
+</html>

@@ -1,6 +1,7 @@
-package ru.hartraien.SpringCloudStorageProject.Controllers;
+package ru.hartraien.SpringCloudStorageProject.Controllers.UserControllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +17,7 @@ import ru.hartraien.SpringCloudStorageProject.Validators.UserValidator;
 
 @Controller
 @RequestMapping("/register")
-public class RegistrationController
+public class RegistrationController extends AbstractUserController
 {
     private final UserValidator userValidator;
     private final UserService userService;
@@ -31,8 +32,10 @@ public class RegistrationController
     }
 
     @GetMapping
-    public String getPage( Model model )
+    public String getPage( Authentication authentication, Model model )
     {
+        if ( isAuthenticated( authentication ) )
+            return "redirect:/userinfo";
         model.addAttribute( "userForm", new UserEntity() );
         return "register";
     }

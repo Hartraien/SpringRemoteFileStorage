@@ -5,8 +5,11 @@
 <head th:insert="fragments/header.html :: header(title='Locked page')">
 </head>
 <body>
-    <nav th:insert="fragments/navigationbar.html"></nav>
-    <p>You got here!</p>
-    <a th:href="@{/}">Main Page</a>
+    <nav th:insert="fragments/navigationbar.html :: navigation_bar"></nav>
+    <div class="container">
+        <p>You got here!</p>
+        <a th:href="@{/}">Main Page</a>
+    </div>
+    <footer th:insert="fragmetns/footer.html :: footer"></footer>
 </body>
 </html>
