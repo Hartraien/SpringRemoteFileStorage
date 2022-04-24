@@ -1,7 +1,11 @@
 package ru.hartraien.SpringCloudStorageProject.Init;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
@@ -31,13 +35,19 @@ public class InitBean
     private final UserService userService;
     private final StorageService storageService;
 
+    private final ApplicationContext context;
+
+    private final Logger logger;
+
 
     @Autowired
-    public InitBean( RoleService roleService, UserService userService, StorageService storageService )
+    public InitBean( RoleService roleService, UserService userService, StorageService storageService, ApplicationContext context )
     {
         this.roleService = roleService;
         this.userService = userService;
         this.storageService = storageService;
+        this.context = context;
+        logger = LoggerFactory.getLogger( InitBean.class );
     }
 
     /**
@@ -65,15 +75,15 @@ public class InitBean
         }
         catch ( UserServiceException e )
         {
-            //TODO exception handling
-            throw new RuntimeException( e );
+            logger.error( "Could not create admin user, shutting down" );
+            SpringApplication.exit( context );
         }
 
         int UserCount = 10;
 
         generateNRandomUsers( userRole, UserCount );
 
-        System.err.println( admin.getDir().getDirname() );
+        logger.info( "admin directory = " + admin.getDir().getDirname() );
 
         fillAdminDir( admin );
     }
@@ -89,6 +99,7 @@ public class InitBean
         }
         catch ( IOException e )
         {
+            logger.error( "Could not fill admin directory", e );
             e.printStackTrace();
         }
     }
@@ -102,6 +113,7 @@ public class InitBean
         }
         catch ( IOException e )
         {
+            logger.error( "Could not copy file " + dest.getFileName() );
             e.printStackTrace();
         }
     }

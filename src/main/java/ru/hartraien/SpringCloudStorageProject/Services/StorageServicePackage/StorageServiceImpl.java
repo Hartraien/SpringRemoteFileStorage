@@ -1,5 +1,7 @@
 package ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -25,12 +27,17 @@ public class StorageServiceImpl implements StorageService
     private final Path rootLocation;
     private final String storage;
 
+    private final Logger logger;
+
     public StorageServiceImpl( @Value("storage") String storageValue ) throws StorageException
     {
+        logger = LoggerFactory.getLogger( StorageServiceImpl.class );
         storage = storageValue;
         this.rootLocation = Path.of( storage );
-        if ( !Files.exists( this.rootLocation ) ) createDirForPath( this.rootLocation );
-        else clearMainFolder();
+        if ( !Files.exists( this.rootLocation ) )
+            createDirForPath( this.rootLocation );
+        else
+            clearMainFolder();
     }
 
     @Override
@@ -51,7 +58,9 @@ public class StorageServiceImpl implements StorageService
         }
         catch ( IOException e )
         {
-            throw new StorageException( "Could not parse subdirectory " + subPath, e );
+            String message = "Could not parse subdirectory " + subPath;
+            logger.error( message );
+            throw new StorageException( message, e );
         }
     }
 
@@ -62,12 +71,16 @@ public class StorageServiceImpl implements StorageService
         try
         {
             Resource resource = new UrlResource( full.toUri() );
-            if ( resource.exists() || resource.isReadable() ) return resource;
-            else throw new StorageException( "Resource is inaccessible" );
+            if ( resource.exists() || resource.isReadable() )
+                return resource;
+            else
+                throw new StorageException( "Resource is inaccessible" );
         }
         catch ( MalformedURLException e )
         {
-            throw new StorageException( "Coudl not get file", e );
+            String message = "Could not get file";
+            logger.error( message + " " + dirname + "/" + filePath );
+            throw new StorageException( message, e );
         }
     }
 
@@ -77,14 +90,20 @@ public class StorageServiceImpl implements StorageService
         Path full = getFullPath( dirname, subPath, " is not a subdirectory of user's folder" );
         Path destinationFile = full.resolve( file.getOriginalFilename() ).normalize();
         if ( !destinationFile.startsWith( full ) )
-            throw new StorageException( "File " + file.getOriginalFilename() + " is not in directory " + subPath );
+        {
+            String message = "File " + file.getOriginalFilename() + " is not in directory " + subPath;
+            logger.error( message );
+            throw new StorageException( message );
+        }
         try ( InputStream inputStream = file.getInputStream() )
         {
             Files.copy( inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING );
         }
         catch ( IOException e )
         {
-            throw new StorageException( "Could not save file", e );
+            String message = "Could not save file";
+            logger.error( message );
+            throw new StorageException( message, e );
         }
     }
 
@@ -94,7 +113,11 @@ public class StorageServiceImpl implements StorageService
         Path full = getFullPath( dirname, subPath, " is not a subdirectory of user's folder" );
         Path newDir = full.resolve( dirName ).normalize();
         if ( !newDir.startsWith( full ) )
-            throw new StorageException( "Directory " + dirName + " is not in directory " + subPath );
+        {
+            String message = "Directory " + dirName + " is not in directory " + subPath;
+            logger.error( message );
+            throw new StorageException( message );
+        }
         this.createDirForPath( newDir );
     }
 
@@ -102,14 +125,21 @@ public class StorageServiceImpl implements StorageService
     public void delete( String dirname, String pathToFile ) throws StorageException
     {
         Path full = getFullPath( dirname, pathToFile, " is not in directory" );
-        if ( !Files.exists( full ) ) throw new StorageException( "No such file" );
+        if ( !Files.exists( full ) )
+        {
+            logger.error( "File " + full + " does not exists" );
+            throw new StorageException( "No such file" );
+        }
         try
         {
-            if ( Files.isDirectory( full ) ) FileSystemUtils.deleteRecursively( full );
-            else Files.delete( full );
+            if ( Files.isDirectory( full ) )
+                FileSystemUtils.deleteRecursively( full );
+            else
+                Files.delete( full );
         }
         catch ( IOException e )
         {
+            logger.error( "Could not delete file " + full.getFileName(), e );
             throw new StorageException( "Could not delete file", e );
         }
     }
@@ -128,7 +158,11 @@ public class StorageServiceImpl implements StorageService
     {
         Path relative = getUserRoot( dirname );
         Path full = relative.resolve( filePath ).normalize();
-        if ( !full.startsWith( relative ) ) throw new StorageException( filePath + errorMessage );
+        if ( !full.startsWith( relative ) )
+        {
+            logger.error( filePath + errorMessage );
+            throw new StorageException( filePath + errorMessage );
+        }
         return full;
     }
 
@@ -145,7 +179,9 @@ public class StorageServiceImpl implements StorageService
         }
         catch ( IOException e )
         {
-            throw new StorageException( "Could not create dir for " + dirPath );
+            final var message = "Could not create dir for " + dirPath;
+            logger.error( message, e );
+            throw new StorageException( message, e );
         }
     }
 

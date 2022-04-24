@@ -1,5 +1,7 @@
 package ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -21,14 +23,17 @@ public class DirServiceImpl implements DirService
 {
     private final DirRepository dirRepository;
     private final StorageService storageService;
+
+    private final Logger logger;
+
     private final int dirNameLength = 5;
-    private final String mainDirExceptionMessage = "No main directory for current user";
 
     @Autowired
     public DirServiceImpl( DirRepository dirRepository, StorageService storageService )
     {
         this.dirRepository = dirRepository;
         this.storageService = storageService;
+        logger = LoggerFactory.getLogger( DirServiceImpl.class );
     }
 
     @Override
@@ -49,7 +54,9 @@ public class DirServiceImpl implements DirService
                 }
                 catch ( StorageException e )
                 {
-                    throw new DirectoryException( "Could not create directory ", e );
+                    final var error_message = "Could not create directory ";
+                    logger.error( error_message, e );
+                    throw new DirectoryException( error_message, e );
                 }
             }
         }
@@ -58,75 +65,66 @@ public class DirServiceImpl implements DirService
     @Override
     public List<FileDTO> getFilesInDir( DirectoryEntity directory, String subPath ) throws DirectoryException
     {
-        if ( dirExists( directory ) )
+        checkIfDirExistsOrThrow( directory );
+        try
         {
-            try
-            {
-                return storageService.getAllFilesInDir( directory.getDirname(), subPath );
-            }
-            catch ( StorageException e )
-            {
-                throw new DirectoryException( "Could not get files in dir", e );
-            }
+            return storageService.getAllFilesInDir( directory.getDirname(), subPath );
         }
-        else
-            throw new DirectoryException( mainDirExceptionMessage );
+        catch ( StorageException e )
+        {
+            final var message = "Could not get files in dir";
+            logger.error( message, e );
+            throw new DirectoryException( message, e );
+        }
     }
 
     @Override
     public Resource getFile( DirectoryEntity directory, String filePath ) throws DirectoryException
     {
-        if ( dirExists( directory ) )
+        checkIfDirExistsOrThrow( directory );
+        try
         {
-            try
-            {
-                return storageService.getFile( directory.getDirname(), filePath );
-            }
-            catch ( StorageException e )
-            {
-                throw new DirectoryException( "Could not get file", e );
-            }
+            return storageService.getFile( directory.getDirname(), filePath );
         }
-        else
-            throw new DirectoryException( mainDirExceptionMessage );
+        catch ( StorageException e )
+        {
+            final var message = "Could not get file " + filePath;
+            logger.error( message, e );
+            throw new DirectoryException( message, e );
+        }
     }
 
     @Override
     public void storeFile( DirectoryEntity directory, String path, MultipartFile file ) throws DirectoryException
     {
-        if ( dirExists( directory ) )
+        checkIfDirExistsOrThrow( directory );
+        try
         {
-            try
-            {
-                storageService.storeFile( directory.getDirname(), path, file );
-            }
-            catch ( StorageException e )
-            {
-                throw new DirectoryException( "Could not store file", e );
-            }
+            storageService.storeFile( directory.getDirname(), path, file );
         }
-        else
-            throw new DirectoryException( mainDirExceptionMessage );
+        catch ( StorageException e )
+        {
+            final var message = "Could not store file " + file.getOriginalFilename();
+            logger.error( message, e );
+            throw new DirectoryException( message, e );
+        }
     }
 
     @Override
     public void createDir( DirectoryEntity directory, String path, String dirName ) throws DirectoryException
     {
-        if ( dirExists( directory ) )
+        checkIfDirExistsOrThrow( directory );
+        try
         {
-            try
-            {
-                storageService.createSubDir( directory.getDirname(), path, dirName );
-            }
-            catch ( StorageException e )
-            {
-                throw new DirectoryException( "Could not get create subdirectory", e );
-            }
+            storageService.createSubDir( directory.getDirname(), path, dirName );
         }
-        else
-            throw new DirectoryException( mainDirExceptionMessage );
+        catch ( StorageException e )
+        {
+            final var message = "Could not get create subdirectory " + dirName;
+            logger.error( message, e );
+            throw new DirectoryException( message, e );
+        }
     }
-
 
     @Override
     public boolean dirExists( DirectoryEntity directory )
@@ -135,21 +133,30 @@ public class DirServiceImpl implements DirService
     }
 
     @Override
-    public void delete( DirectoryEntity dir, String pathToFile ) throws DirectoryException
+    public void delete( DirectoryEntity directory, String pathToFile ) throws DirectoryException
     {
-        if ( dirExists( dir ) )
+        checkIfDirExistsOrThrow( directory );
+        try
         {
-            try
-            {
-                storageService.delete( dir.getDirname(), pathToFile );
-            }
-            catch ( StorageException e )
-            {
-                throw new DirectoryException( "Could not delete", e );
-            }
+            storageService.delete( directory.getDirname(), pathToFile );
         }
-        else
-            throw new DirectoryException( mainDirExceptionMessage );
+        catch ( StorageException e )
+        {
+            final var message = "Could not delete " + pathToFile;
+            logger.error( message, e );
+            throw new DirectoryException( message, e );
+        }
+    }
+
+    private void checkIfDirExistsOrThrow( DirectoryEntity directory ) throws DirectoryException
+    {
+        if ( !dirExists( directory ) )
+        {
+            String mainDirExceptionMessage = "No main directory for current user";
+            final var message = mainDirExceptionMessage + " " + directory.getDirname();
+            logger.error( message );
+            throw new DirectoryException( message );
+        }
     }
 
 }

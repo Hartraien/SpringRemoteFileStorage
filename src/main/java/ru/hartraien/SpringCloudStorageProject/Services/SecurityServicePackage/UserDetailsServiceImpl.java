@@ -1,5 +1,7 @@
 package ru.hartraien.SpringCloudStorageProject.Services.SecurityServicePackage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,11 +21,13 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService
 {
     private final UserService userService;
+    private final Logger logger;
 
     @Autowired
     public UserDetailsServiceImpl( UserService userService )
     {
         this.userService = userService;
+        logger = LoggerFactory.getLogger( UserDetailsServiceImpl.class );
     }
 
     @Override
@@ -31,7 +35,10 @@ public class UserDetailsServiceImpl implements UserDetailsService
     {
         final UserEntity userByUsername = userService.findByUsername( username );
         if ( userByUsername == null )
+        {
+            logger.error( "Could not find user with username='" + username + "'" );
             throw new UsernameNotFoundException( username );
+        }
 
         Set<GrantedAuthority> authorities = new HashSet<>();
 

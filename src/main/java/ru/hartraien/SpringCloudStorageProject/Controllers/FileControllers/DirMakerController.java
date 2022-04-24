@@ -36,6 +36,7 @@ public class DirMakerController extends AbstractFileController
         }
         catch ( DirectoryException e )
         {
+            getLogger().warn( "Could not create directory " + dirName, e );
             redirectAttributes.addAttribute( "error", e.getMessage() );
         }
         return "redirect:/viewfiles/" + path;

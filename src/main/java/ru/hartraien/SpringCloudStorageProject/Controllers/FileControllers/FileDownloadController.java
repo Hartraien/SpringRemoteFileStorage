@@ -51,6 +51,7 @@ public class FileDownloadController extends AbstractFileController
         }
         catch ( DirectoryException e )
         {
+            getLogger().warn( "Could not get file + " + filePath, e );
             return ResponseEntity.notFound().build();
         }
     }

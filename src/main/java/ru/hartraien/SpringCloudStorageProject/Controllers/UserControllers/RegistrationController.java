@@ -1,5 +1,7 @@
 package ru.hartraien.SpringCloudStorageProject.Controllers.UserControllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ public class RegistrationController extends AbstractUserController
     private final UserValidator userValidator;
     private final UserService userService;
     private final SecurityService securityService;
+    private final Logger logger;
 
     @Autowired
     public RegistrationController( UserValidator userValidator, UserService userService, SecurityService securityService )
@@ -29,6 +32,7 @@ public class RegistrationController extends AbstractUserController
         this.userValidator = userValidator;
         this.userService = userService;
         this.securityService = securityService;
+        logger = LoggerFactory.getLogger( RegistrationController.class );
     }
 
     @GetMapping
@@ -46,7 +50,8 @@ public class RegistrationController extends AbstractUserController
         userValidator.validate( userForm, bindingResult );
         if ( bindingResult.hasErrors() )
         {
-            bindingResult.getAllErrors().forEach( System.err::println );
+            logger.warn( "Could not validate user" );
+            bindingResult.getAllErrors().forEach( objectError -> logger.warn( objectError.toString() ) );
             return "register";
         }
 
@@ -56,7 +61,7 @@ public class RegistrationController extends AbstractUserController
         }
         catch ( UserServiceException e )
         {
-            //TODO add error attribute
+            logger.warn( "Could not save new user", e );
             return "register";
         }
 

@@ -21,7 +21,6 @@ import java.util.List;
 @RequestMapping("/viewfiles")
 public class FileViewController extends AbstractFileController
 {
-
     @Autowired
     public FileViewController( UserService userRepository, DirService dirService )
     {
@@ -42,6 +41,7 @@ public class FileViewController extends AbstractFileController
         }
         catch ( DirectoryException e )
         {
+            getLogger().warn( "Could not get files in directory", e );
             filesInDir = Collections.emptyList();
         }
         model.addAttribute( "backPath", backPath );

@@ -1,5 +1,7 @@
 package ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,8 @@ public class UserServiceImpl implements UserService
     private final DirService dirService;
     private final PasswordEncoder passwordEncoder;
 
+    private final Logger logger;
+
     @Autowired
     public UserServiceImpl( UserRepository userRepository, RoleService roleService, DirService dirService, PasswordEncoder passwordEncoder )
     {
@@ -33,6 +37,7 @@ public class UserServiceImpl implements UserService
         this.roleService = roleService;
         this.dirService = dirService;
         this.passwordEncoder = passwordEncoder;
+        logger = LoggerFactory.getLogger( UserServiceImpl.class );
     }
 
 
@@ -46,7 +51,11 @@ public class UserServiceImpl implements UserService
             userRepository.save( user );
         }
         else
-            throw new UserServiceException( "User " + user.getUsername() + " already exists" );
+        {
+            String message = "User " + user.getUsername() + " already exists";
+            logger.error( message );
+            throw new UserServiceException( message );
+        }
     }
 
     @Override
@@ -89,7 +98,7 @@ public class UserServiceImpl implements UserService
         }
         catch ( DirectoryException e )
         {
-            //TODO add logger and UserService Exception
+            logger.error( "Could not create directory for user: " + user.getUsername() );
             throw new UserServiceException( "Could not create directory for user", e );
         }
         if ( role_user != null )

@@ -35,6 +35,7 @@ public class FileDeleteController extends AbstractFileController
         }
         catch ( DirectoryException e )
         {
+            getLogger().warn( "Could not delte file = " + pathToFile, e );
             redirectAttributes.addAttribute( "error", e.getMessage() );
         }
         return "redirect:/viewfiles/" + path;

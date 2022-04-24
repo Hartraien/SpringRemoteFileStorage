@@ -34,6 +34,7 @@ public class FileUploadController extends AbstractFileController
         }
         catch ( DirectoryException e )
         {
+            getLogger().warn( "Could not upload file " + file.getOriginalFilename(), e );
             redirectAttributes.addAttribute( "error", e.getMessage() );
         }
         return "redirect:/viewfiles/" + path;

@@ -1,5 +1,7 @@
 package ru.hartraien.SpringCloudStorageProject.Controllers.FileControllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +19,19 @@ public class AbstractFileController
     private final UserService userService;
     private final String basePath;
 
+    private final Logger logger;
+
     public AbstractFileController( UserService userService, DirService dirService, Class<? extends AbstractFileController> clazz )
     {
         this.userService = userService;
         this.dirService = dirService;
         this.basePath = getBasePath( clazz );
+        logger = LoggerFactory.getLogger( clazz );
+    }
+
+    protected Logger getLogger()
+    {
+        return logger;
     }
 
     protected UserEntity getCurrentUser( Authentication authentication )
@@ -45,6 +55,7 @@ public class AbstractFileController
     {
         return dirService;
     }
+
 
     private String getBasePath( Class<? extends AbstractFileController> clazz )
     {
