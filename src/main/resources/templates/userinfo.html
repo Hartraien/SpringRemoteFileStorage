@@ -8,10 +8,13 @@
     <nav th:insert="fragments/navigationbar.html :: navigation_bar"></nav>
     <div class="container">
         <p>Your user name = <span sec:authentication="name">Username</span></p>
-        <p sec:authorize="hasAuthority('Role_Admin')">Your roles: </p>
-        <p th:each="authority : ${#authentication.getAuthorities()}"
-           th:text="${authority.getAuthority()}">
-        </p>
+        <div sec:authorize="hasAuthority('Role_Admin')">
+            <p>Your roles: </p>
+            <ul class="list-group list-group-horizontal-sm">
+                <li th:each="authority : ${#authentication.getAuthorities()}"
+                    th:text="${authority.getAuthority()}"></li>
+            </ul>
+        </div>
         <form method="post" th:action="@{/clearFolder}">
             <button class="btn btn-danger" type="submit">Delete all my files</button>
         </form>
