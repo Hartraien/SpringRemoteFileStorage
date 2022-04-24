@@ -8,6 +8,9 @@ import org.springframework.validation.Validator;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
+/**
+ * Validates user input
+ */
 @Component
 public class UserValidator implements Validator
 {

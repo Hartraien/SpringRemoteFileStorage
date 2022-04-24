@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * {@inheritDoc}
+ */
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService
@@ -41,6 +44,9 @@ public class UserServiceImpl implements UserService
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void save( UserEntity user ) throws UserServiceException
@@ -58,24 +64,36 @@ public class UserServiceImpl implements UserService
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserEntity findByUsername( String username )
     {
         return userRepository.findUserByUsername( username );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<UserEntity> getAllUsers()
     {
         return userRepository.findAll();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<UserEntity> getAllUsersPaging( Pageable request )
     {
         return userRepository.findAll( request );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void saveAll( List<UserEntity> entities )

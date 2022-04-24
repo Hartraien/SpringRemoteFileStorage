@@ -17,6 +17,9 @@ import ru.hartraien.SpringCloudStorageProject.Utility.StringProducer;
 
 import java.util.List;
 
+/**
+ * {@inheritDoc}
+ */
 @Service
 @Transactional(readOnly = true)
 public class DirServiceImpl implements DirService
@@ -36,6 +39,9 @@ public class DirServiceImpl implements DirService
         logger = LoggerFactory.getLogger( DirServiceImpl.class );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DirectoryEntity generateNewDir() throws DirectoryException
     {
@@ -62,6 +68,9 @@ public class DirServiceImpl implements DirService
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<FileDTO> getFilesInDir( DirectoryEntity directory, String subPath ) throws DirectoryException
     {
@@ -78,6 +87,9 @@ public class DirServiceImpl implements DirService
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Resource getFile( DirectoryEntity directory, String filePath ) throws DirectoryException
     {
@@ -94,6 +106,9 @@ public class DirServiceImpl implements DirService
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void storeFile( DirectoryEntity directory, String path, MultipartFile file ) throws DirectoryException
     {
@@ -110,6 +125,9 @@ public class DirServiceImpl implements DirService
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createDir( DirectoryEntity directory, String path, String dirName ) throws DirectoryException
     {
@@ -126,12 +144,18 @@ public class DirServiceImpl implements DirService
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean dirExists( DirectoryEntity directory )
     {
         return dirRepository.findByDirname( directory.getDirname() ) != null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete( DirectoryEntity directory, String pathToFile ) throws DirectoryException
     {

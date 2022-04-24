@@ -6,6 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Repositories.RoleRepository;
 
+/**
+ * {@inheritDoc}
+ */
 @Service
 @Transactional(readOnly = true)
 public class RoleServiceImpl implements RoleService
@@ -18,12 +21,18 @@ public class RoleServiceImpl implements RoleService
         this.roleRepository = roleRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Role findRoleByName( String name )
     {
         return roleRepository.findRoleByName( name );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void save( Role role )

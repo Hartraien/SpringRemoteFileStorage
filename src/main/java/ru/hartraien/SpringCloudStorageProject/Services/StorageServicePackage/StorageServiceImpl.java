@@ -21,6 +21,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * {@inheritDoc}
+ * Stores file using filesystem of OS
+ */
 @Service
 public class StorageServiceImpl implements StorageService
 {
@@ -40,6 +44,9 @@ public class StorageServiceImpl implements StorageService
             clearMainFolder();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createDir( String directory ) throws StorageException
     {
@@ -47,6 +54,9 @@ public class StorageServiceImpl implements StorageService
         createDirForPath( dirPath );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<FileDTO> getAllFilesInDir( String dirname, String subPath ) throws StorageException
     {
@@ -64,6 +74,9 @@ public class StorageServiceImpl implements StorageService
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Resource getFile( String dirname, String filePath ) throws StorageException
     {
@@ -84,6 +97,9 @@ public class StorageServiceImpl implements StorageService
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void storeFile( String dirname, String subPath, MultipartFile file ) throws StorageException
     {
@@ -107,6 +123,9 @@ public class StorageServiceImpl implements StorageService
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createSubDir( String dirname, String subPath, String dirName ) throws StorageException
     {
@@ -121,6 +140,9 @@ public class StorageServiceImpl implements StorageService
         this.createDirForPath( newDir );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete( String dirname, String pathToFile ) throws StorageException
     {
