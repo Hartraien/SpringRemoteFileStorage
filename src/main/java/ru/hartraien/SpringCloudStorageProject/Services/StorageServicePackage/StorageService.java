@@ -15,6 +15,7 @@ public interface StorageService
     /**
      * Create directory with given name
      * Used when creating users
+     *
      * @param directory - name of directory to create
      * @throws StorageException - if could not create a directory
      */
@@ -22,6 +23,7 @@ public interface StorageService
 
     /**
      * List all files in directory
+     *
      * @param dirname - name of user directory
      * @param subPath - path inside user directory
      * @return list of FileDTOs containing info about files
@@ -31,7 +33,8 @@ public interface StorageService
 
     /**
      * Get file from user directory
-     * @param dirname - user directory
+     *
+     * @param dirname  - user directory
      * @param filePath - path to file relative to user directory
      * @return File as a Resource
      * @throws StorageException - if could not get file
@@ -40,17 +43,19 @@ public interface StorageService
 
     /**
      * Saves file
+     *
      * @param dirname - name of user directory
-     * @param path - path to subdirectory relative to dirname
-     * @param file - file to store
+     * @param path    - path to subdirectory relative to dirname
+     * @param file    - file to store
      * @throws StorageException - if could not store file
      */
     void storeFile( String dirname, String path, MultipartFile file ) throws StorageException;
 
     /**
      * Create subdirectory
+     *
      * @param dirname - name of users directory
-     * @param path - path where to create new directory, relative to dirname
+     * @param path    - path where to create new directory, relative to dirname
      * @param dirName - name of new directory
      * @throws StorageException - if could not create subdirectory
      */
@@ -58,7 +63,8 @@ public interface StorageService
 
     /**
      * Delete file or directory by path
-     * @param dirname - name of user directory
+     *
+     * @param dirname    - name of user directory
      * @param pathToFile - path to file relative to dirname
      * @throws StorageException - if could not delete given file
      */

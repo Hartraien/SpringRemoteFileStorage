@@ -10,6 +10,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageException;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 @Controller
@@ -17,9 +19,9 @@ import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserSe
 public class FileDeleteController extends AbstractFileController
 {
     @Autowired
-    public FileDeleteController( UserService userRepository, DirService dirService )
+    public FileDeleteController( UserService userRepository, DirService dirService, StorageService storageService )
     {
-        super( userRepository, dirService, FileDeleteController.class );
+        super( userRepository, dirService, storageService, FileDeleteController.class );
     }
 
     @PostMapping
@@ -31,11 +33,12 @@ public class FileDeleteController extends AbstractFileController
         UserEntity user = getCurrentUser( authentication );
         try
         {
-            getDirService().delete( user.getDir(), pathToFile );
+            getDirService().checkIfDirExistsOrThrow( user.getDir() );
+            getStorageService().delete( user.getDir().getDirname(), pathToFile );
         }
-        catch ( DirectoryException e )
+        catch ( DirectoryException | StorageException e )
         {
-            getLogger().warn( "Could not delte file = " + pathToFile, e );
+            getLogger().warn( "Could not delete file = " + pathToFile, e );
             redirectAttributes.addAttribute( "error", e.getMessage() );
         }
         return "redirect:/viewfiles/" + path;

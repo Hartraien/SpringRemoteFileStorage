@@ -11,6 +11,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageException;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 @Controller
@@ -19,9 +21,9 @@ public class FileUploadController extends AbstractFileController
 {
 
     @Autowired
-    public FileUploadController( UserService userRepository, DirService dirService )
+    public FileUploadController( UserService userRepository, DirService dirService, StorageService storageService )
     {
-        super( userRepository, dirService, FileUploadController.class );
+        super( userRepository, dirService, storageService, FileUploadController.class );
     }
 
     @PostMapping("")
@@ -30,9 +32,10 @@ public class FileUploadController extends AbstractFileController
         UserEntity user = getCurrentUser( authentication );
         try
         {
-            getDirService().storeFile( user.getDir(), path, file );
+            getDirService().checkIfDirExistsOrThrow( user.getDir() );
+            getStorageService().storeFile( user.getDir().getDirname(), path, file );
         }
-        catch ( DirectoryException e )
+        catch ( DirectoryException | StorageException e )
         {
             getLogger().warn( "Could not upload file " + file.getOriginalFilename(), e );
             redirectAttributes.addAttribute( "error", e.getMessage() );

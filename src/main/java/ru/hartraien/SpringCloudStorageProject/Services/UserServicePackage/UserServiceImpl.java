@@ -8,12 +8,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.hartraien.SpringCloudStorageProject.Entities.DirectoryEntity;
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
-import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
 import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageException;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,16 +31,19 @@ public class UserServiceImpl implements UserService
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final DirService dirService;
+
+    private final StorageService storageService;
     private final PasswordEncoder passwordEncoder;
 
     private final Logger logger;
 
     @Autowired
-    public UserServiceImpl( UserRepository userRepository, RoleService roleService, DirService dirService, PasswordEncoder passwordEncoder )
+    public UserServiceImpl( UserRepository userRepository, RoleService roleService, DirService dirService, StorageService storageService, PasswordEncoder passwordEncoder )
     {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.dirService = dirService;
+        this.storageService = storageService;
         this.passwordEncoder = passwordEncoder;
         logger = LoggerFactory.getLogger( UserServiceImpl.class );
     }
@@ -112,9 +117,12 @@ public class UserServiceImpl implements UserService
         Role role_user = roleService.findRoleByName( "Role_User" );
         try
         {
-            user.setDir( dirService.generateNewDir() );
+            final DirectoryEntity directory = dirService.generateNewDir();
+            user.setDir( directory );
+            storageService.createDir( directory.getDirname() );
+
         }
-        catch ( DirectoryException e )
+        catch ( StorageException e )
         {
             logger.error( "Could not create directory for user: " + user.getUsername() );
             throw new UserServiceException( "Could not create directory for user", e );

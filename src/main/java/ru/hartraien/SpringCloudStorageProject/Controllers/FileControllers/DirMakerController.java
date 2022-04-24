@@ -10,6 +10,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageException;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 @Controller
@@ -18,9 +20,9 @@ public class DirMakerController extends AbstractFileController
 {
 
     @Autowired
-    public DirMakerController( UserService userRepository, DirService dirService )
+    public DirMakerController( UserService userRepository, DirService dirService, StorageService storageService )
     {
-        super( userRepository, dirService, DirMakerController.class );
+        super( userRepository, dirService, storageService, DirMakerController.class );
     }
 
     @PostMapping("")
@@ -32,9 +34,10 @@ public class DirMakerController extends AbstractFileController
         UserEntity user = getCurrentUser( authentication );
         try
         {
-            getDirService().createDir( user.getDir(), path, dirName );
+            getDirService().checkIfDirExistsOrThrow( user.getDir() );
+            getStorageService().createSubDir( user.getDir().getDirname(), path, dirName );
         }
-        catch ( DirectoryException e )
+        catch ( DirectoryException | StorageException e )
         {
             getLogger().warn( "Could not create directory " + dirName, e );
             redirectAttributes.addAttribute( "error", e.getMessage() );

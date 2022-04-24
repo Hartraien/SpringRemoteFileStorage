@@ -7,6 +7,7 @@ public interface StringProducer
 {
     /**
      * Produce string of given length
+     *
      * @param length - length of string
      * @return string of given length
      */

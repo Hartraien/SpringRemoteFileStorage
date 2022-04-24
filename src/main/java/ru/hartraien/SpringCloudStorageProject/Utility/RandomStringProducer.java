@@ -12,6 +12,7 @@ public class RandomStringProducer implements StringProducer
 
     /**
      * Produces random lowercase string of given length
+     *
      * @param length - length of string
      * @return random lowercase string of given length
      */

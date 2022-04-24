@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,16 +18,23 @@ public class AbstractFileController
 {
     private final DirService dirService;
     private final UserService userService;
+    private final StorageService storageService;
     private final String basePath;
 
     private final Logger logger;
 
-    public AbstractFileController( UserService userService, DirService dirService, Class<? extends AbstractFileController> clazz )
+    public AbstractFileController( UserService userService, DirService dirService, StorageService storageService, Class<? extends AbstractFileController> clazz )
     {
         this.userService = userService;
         this.dirService = dirService;
+        this.storageService = storageService;
         this.basePath = getBasePath( clazz );
         logger = LoggerFactory.getLogger( clazz );
+    }
+
+    protected StorageService getStorageService()
+    {
+        return storageService;
     }
 
     protected Logger getLogger()

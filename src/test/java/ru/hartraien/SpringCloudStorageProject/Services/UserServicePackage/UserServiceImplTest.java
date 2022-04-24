@@ -13,8 +13,8 @@ import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
-import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
 import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Utility.RandomStringProducer;
 import ru.hartraien.SpringCloudStorageProject.Utility.StringProducer;
 
@@ -28,6 +28,7 @@ class UserServiceImplTest
     private UserRepository userRepository;
     private RoleService roleService;
     private DirService dirService;
+    private StorageService storageService;
 
     private UserService userService;
 
@@ -38,7 +39,8 @@ class UserServiceImplTest
         userRepository = Mockito.mock( UserRepository.class );
         roleService = Mockito.mock( RoleService.class );
         dirService = Mockito.mock( DirService.class );
-        userService = new UserServiceImpl( userRepository, roleService, dirService, passwordEncoder );
+        storageService = Mockito.mock( StorageService.class );
+        userService = new UserServiceImpl( userRepository, roleService, dirService, storageService, passwordEncoder );
     }
 
     @Test
@@ -69,14 +71,7 @@ class UserServiceImplTest
         } );
         Mockito.when( passwordEncoder.encode( password ) ).thenReturn( encode_addition + password );
         Mockito.when( roleService.findRoleByName( roleName ) ).thenReturn( role );
-        try
-        {
-            Mockito.when( dirService.generateNewDir() ).thenReturn( directory );
-        }
-        catch ( DirectoryException e )
-        {
-            Assertions.fail( "Could not mock dirService: " + e.getMessage() );
-        }
+        Mockito.when( dirService.generateNewDir() ).thenReturn( directory );
 
         try
         {
@@ -91,14 +86,7 @@ class UserServiceImplTest
         Mockito.verify( userRepository ).findUserByUsername( username );
         Mockito.verify( roleService ).findRoleByName( roleName );
         Mockito.verify( passwordEncoder ).encode( password );
-        try
-        {
-            Mockito.verify( dirService ).generateNewDir();
-        }
-        catch ( DirectoryException e )
-        {
-            Assertions.fail( "Failed to mock dirService: " + e.getMessage() );
-        }
+        Mockito.verify( dirService ).generateNewDir();
 
         Assertions.assertTrue( marker[0] );
         Assertions.assertEquals( username, user.getUsername() );
@@ -195,6 +183,9 @@ class UserServiceImplTest
         int times = 10;
         List<UserEntity> users = generateListOfUsers( times );
 
+        DirectoryEntity directory = new DirectoryEntity();
+        directory.setDirname( "name" );
+        Mockito.when( dirService.generateNewDir() ).thenReturn( directory );
         userService.saveAll( users );
 
         Mockito.verify( userRepository, Mockito.times( 1 ) ).saveAll( Mockito.any() );

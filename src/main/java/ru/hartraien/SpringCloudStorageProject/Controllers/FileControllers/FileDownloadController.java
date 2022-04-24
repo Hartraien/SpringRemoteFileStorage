@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageException;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,9 +27,9 @@ public class FileDownloadController extends AbstractFileController
 {
 
     @Autowired
-    public FileDownloadController( UserService userRepository, DirService dirService )
+    public FileDownloadController( UserService userRepository, DirService dirService, StorageService storageService )
     {
-        super( userRepository, dirService, FileDownloadController.class );
+        super( userRepository, dirService, storageService, FileDownloadController.class );
     }
 
     @GetMapping("/**")
@@ -39,7 +41,8 @@ public class FileDownloadController extends AbstractFileController
         Resource file;
         try
         {
-            file = getDirService().getFile( user.getDir(), filePath );
+            getDirService().checkIfDirExistsOrThrow( user.getDir() );
+            file = getStorageService().getFile( user.getDir().getDirname(), filePath );
             ContentDisposition contentDisposition = ContentDisposition.builder( "attachment" )
                     .filename( URLDecoder.decode( file.getFilename(), StandardCharsets.UTF_8 ), StandardCharsets.UTF_8 )
                     .build();
@@ -49,7 +52,7 @@ public class FileDownloadController extends AbstractFileController
                     .headers( headers )
                     .body( file );
         }
-        catch ( DirectoryException e )
+        catch ( DirectoryException | StorageException e )
         {
             getLogger().warn( "Could not get file + " + filePath, e );
             return ResponseEntity.notFound().build();

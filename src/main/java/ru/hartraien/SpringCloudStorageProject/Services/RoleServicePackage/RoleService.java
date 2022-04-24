@@ -9,6 +9,7 @@ public interface RoleService
 {
     /**
      * Finds role by role name
+     *
      * @param name - name of role
      * @return - role with given name of null otherwise
      */
@@ -16,6 +17,7 @@ public interface RoleService
 
     /**
      * Saves new role to DB
+     *
      * @param role - role to save
      */
     void save( Role role );

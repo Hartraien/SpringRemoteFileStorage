@@ -12,12 +12,16 @@
             </div>
             <ul class="nav me-auto">
                 <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/viewfiles}">Your files</a></li>
-                <li class="nav-item"><a class="nav-link" sec:authorize="hasAuthority('Role_Admin')" th:href="@{/userlist}">List of users</a></li>
+                <li class="nav-item"><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/viewfiles}">Your
+                    files</a></li>
+                <li class="nav-item"><a class="nav-link" sec:authorize="hasAuthority('Role_Admin')"
+                                        th:href="@{/userlist}">List of users</a></li>
             </ul>
             <ul class="nav ms-auto" sec:authorize="!isAuthenticated()">
-                <li class="nav-item"><a class="nav-link" th:href="@{/register}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/register}"><span
+                        class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/login}"><span
+                        class="glyphicon glyphicon-log-in"></span> Login</a></li>
             </ul>
             <ul class="nav ms-auto" sec:authorize="isAuthenticated()">
                 <li class="nav-item">

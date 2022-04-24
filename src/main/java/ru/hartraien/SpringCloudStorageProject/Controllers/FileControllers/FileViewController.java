@@ -11,6 +11,8 @@ import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTO;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirectoryException;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageException;
+import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,9 +24,9 @@ import java.util.List;
 public class FileViewController extends AbstractFileController
 {
     @Autowired
-    public FileViewController( UserService userRepository, DirService dirService )
+    public FileViewController( UserService userRepository, DirService dirService, StorageService storageService )
     {
-        super( userRepository, dirService, FileViewController.class );
+        super( userRepository, dirService, storageService, FileViewController.class );
     }
 
     @GetMapping("/**")
@@ -37,9 +39,10 @@ public class FileViewController extends AbstractFileController
         List<FileDTO> filesInDir;
         try
         {
-            filesInDir = getDirService().getFilesInDir( user.getDir(), subPath );
+            getDirService().checkIfDirExistsOrThrow( user.getDir() );
+            filesInDir = getStorageService().getAllFilesInDir( user.getDir().getDirname(), subPath );
         }
-        catch ( DirectoryException e )
+        catch ( DirectoryException | StorageException e )
         {
             getLogger().warn( "Could not get files in directory", e );
             filesInDir = Collections.emptyList();
@@ -63,28 +66,5 @@ public class FileViewController extends AbstractFileController
                 return subPath.substring( 0, index );
         }
     }
-
-//    @GetMapping("/{filename:.+}")
-//    public ResponseEntity<Resource> getFile( @PathVariable String filename, Authentication authentication )
-//    {
-//        UserEntity user = getCurrentUser( authentication );
-//        Resource file = dirService.loadAsResource( filename, user );
-//        ContentDisposition contentDisposition = ContentDisposition.builder( "attachment" )
-//                .filename( filename, StandardCharsets.UTF_8 )
-//                .build();
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentDisposition( contentDisposition );
-//        return ResponseEntity.ok()
-//                .headers( headers )
-//                .body( file );
-//    }
-
-
-//    @PostMapping
-//    public String uploadFile( @RequestParam("file") MultipartFile file, Authentication authentication )
-//    {
-//        dirService.uploadFile( file, getCurrentUser( authentication ) );
-//        return "redirect:/uploadpage";
-//    }
 
 }
