@@ -189,6 +189,17 @@ class UserServiceImplTest
         Mockito.verify( userRepository, Mockito.times( times ) ).findAll( Mockito.any( Pageable.class ) );
     }
 
+    @Test
+    void saveAll()
+    {
+        int times = 10;
+        List<UserEntity> users = generateListOfUsers( times );
+
+        userService.saveAll( users );
+
+        Mockito.verify( userRepository, Mockito.times( 1 ) ).saveAll( Mockito.any() );
+    }
+
     private List<UserEntity> generateListOfUsers( int times )
     {
         List<UserEntity> users = new ArrayList<>();
@@ -212,16 +223,5 @@ class UserServiceImplTest
             result.add( list.get( i ) );
         }
         return result;
-    }
-
-    @Test
-    void saveAll()
-    {
-        int times = 10;
-        List<UserEntity> users = generateListOfUsers( times );
-
-        userService.saveAll( users );
-
-        Mockito.verify( userRepository, Mockito.times( 1 ) ).saveAll( Mockito.any() );
     }
 }

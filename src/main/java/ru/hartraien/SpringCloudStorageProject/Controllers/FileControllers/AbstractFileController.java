@@ -24,16 +24,6 @@ public class AbstractFileController
         this.basePath = getBasePath( clazz );
     }
 
-    private String getBasePath( Class<? extends AbstractFileController> clazz )
-    {
-        final RequestMapping annotation = AnnotationUtils.findAnnotation( clazz, RequestMapping.class );
-        if ( annotation != null )
-            return annotation.path()[0] + "/";
-        else
-            return "";
-    }
-
-
     protected UserEntity getCurrentUser( Authentication authentication )
     {
         return userService.findByUsername( authentication.getName() );
@@ -51,9 +41,17 @@ public class AbstractFileController
             return "";
     }
 
-
     protected DirService getDirService()
     {
         return dirService;
+    }
+
+    private String getBasePath( Class<? extends AbstractFileController> clazz )
+    {
+        final RequestMapping annotation = AnnotationUtils.findAnnotation( clazz, RequestMapping.class );
+        if ( annotation != null )
+            return annotation.path()[0] + "/";
+        else
+            return "";
     }
 }

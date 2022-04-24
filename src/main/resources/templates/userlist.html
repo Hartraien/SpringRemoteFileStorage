@@ -11,7 +11,8 @@
             <div class="row justify-content-center">
                 <input id="pageNew" name="page" type="hidden" value="0">
                 <label for="sizeNew">Users per page</label>
-                <input id="sizeNew" min="1" name="size" oninput="validity.valid||(value='');" th:value="${users.getSize()}"
+                <input id="sizeNew" min="1" name="size" oninput="validity.valid||(value='');"
+                       th:value="${users.getSize()}"
                        type="number">
                 <button class="btn btn-secondary" type="submit">Display</button>
             </div>

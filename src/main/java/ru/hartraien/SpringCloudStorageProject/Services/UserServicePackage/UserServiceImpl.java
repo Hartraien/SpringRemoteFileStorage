@@ -49,36 +49,6 @@ public class UserServiceImpl implements UserService
             throw new UserServiceException( "User " + user.getUsername() + " already exists" );
     }
 
-    private void processUser( UserEntity user ) throws UserServiceException
-    {
-        user.setPassword( passwordEncoder.encode( user.getPassword() ) );
-        Role role_user = roleService.findRoleByName( "Role_User" );
-        try
-        {
-            user.setDir( dirService.generateNewDir() );
-        }
-        catch ( DirectoryException e )
-        {
-            //TODO add logger and UserService Exception
-            throw new UserServiceException( "Could not create directory for user", e );
-        }
-        if ( role_user != null )
-            user.addRole( role_user );
-    }
-
-    private UserEntity processUserAndReturnOrNull( UserEntity user )
-    {
-        try
-        {
-            processUser( user );
-        }
-        catch ( UserServiceException e )
-        {
-            return null;
-        }
-        return user;
-    }
-
     @Override
     public UserEntity findByUsername( String username )
     {
@@ -107,6 +77,36 @@ public class UserServiceImpl implements UserService
                 .filter( Objects::nonNull )
                 .collect( Collectors.toList() );
         userRepository.saveAll( users );
+    }
+
+    private void processUser( UserEntity user ) throws UserServiceException
+    {
+        user.setPassword( passwordEncoder.encode( user.getPassword() ) );
+        Role role_user = roleService.findRoleByName( "Role_User" );
+        try
+        {
+            user.setDir( dirService.generateNewDir() );
+        }
+        catch ( DirectoryException e )
+        {
+            //TODO add logger and UserService Exception
+            throw new UserServiceException( "Could not create directory for user", e );
+        }
+        if ( role_user != null )
+            user.addRole( role_user );
+    }
+
+    private UserEntity processUserAndReturnOrNull( UserEntity user )
+    {
+        try
+        {
+            processUser( user );
+        }
+        catch ( UserServiceException e )
+        {
+            return null;
+        }
+        return user;
     }
 
     private boolean userNotInDB( UserEntity user )

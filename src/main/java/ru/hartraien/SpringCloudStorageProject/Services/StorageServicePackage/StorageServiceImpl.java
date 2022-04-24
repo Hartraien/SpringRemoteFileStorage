@@ -29,20 +29,8 @@ public class StorageServiceImpl implements StorageService
     {
         storage = storageValue;
         this.rootLocation = Path.of( storage );
-        if ( !Files.exists( this.rootLocation ) )
-            createDirForPath( this.rootLocation );
-        else
-            clearMainFolder();
-    }
-
-    private void clearMainFolder()
-    {
-        FileSystemUtils.deleteRecursively( rootLocation.toFile() );
-    }
-
-    private Path getUserRoot( String dir )
-    {
-        return rootLocation.resolve( dir ).normalize();
+        if ( !Files.exists( this.rootLocation ) ) createDirForPath( this.rootLocation );
+        else clearMainFolder();
     }
 
     @Override
@@ -56,116 +44,97 @@ public class StorageServiceImpl implements StorageService
     public List<FileDTO> getAllFilesInDir( String dirname, String subPath ) throws StorageException
     {
         Path relative = getUserRoot( dirname );
-        Path full = relative.resolve( subPath ).normalize();
-        if ( full.startsWith( relative ) )
+        Path full = getFullPath( dirname, subPath, " is not a subdirectory of user folder" );
+        try ( var stream = getFilesInPath( full ) )
         {
-            try ( var stream = getFilesInPath( full ) )
-            {
-                return stream.map( path -> new FileDTO( path, relative ) ).sorted( new FileDTOComparator() )
-                        .collect( Collectors.toList() );
-            }
-            catch ( IOException e )
-            {
-                throw new StorageException( "Could not parse subdirectory " + subPath, e );
-            }
+            return stream.map( path -> new FileDTO( path, relative ) ).sorted( new FileDTOComparator() ).collect( Collectors.toList() );
         }
-        else
-            throw new StorageException( subPath + " is not a subdirectory of user folder" );
+        catch ( IOException e )
+        {
+            throw new StorageException( "Could not parse subdirectory " + subPath, e );
+        }
     }
 
     @Override
     public Resource getFile( String dirname, String filePath ) throws StorageException
     {
-        Path relative = getUserRoot( dirname );
-        Path full = relative.resolve( filePath ).normalize();
-        if ( full.startsWith( relative ) )
+        Path full = getFullPath( dirname, filePath, " is not a subdirectory of user folder" );
+        try
         {
-            try
-            {
-                Resource resource = new UrlResource( full.toUri() );
-                if ( resource.exists() || resource.isReadable() )
-                    return resource;
-                else throw new StorageException( "Resource is unaccessible" );
-            }
-            catch ( MalformedURLException e )
-            {
-                throw new StorageException( "Coudl not get file", e );
-            }
+            Resource resource = new UrlResource( full.toUri() );
+            if ( resource.exists() || resource.isReadable() ) return resource;
+            else throw new StorageException( "Resource is inaccessible" );
         }
-        else
-            throw new StorageException( filePath + " is not a subdirectory of user folder" );
+        catch ( MalformedURLException e )
+        {
+            throw new StorageException( "Coudl not get file", e );
+        }
     }
 
     @Override
     public void storeFile( String dirname, String subPath, MultipartFile file ) throws StorageException
     {
-        Path relative = getUserRoot( dirname );
-        Path full = relative.resolve( subPath ).normalize();
-        if ( full.startsWith( relative ) )
+        Path full = getFullPath( dirname, subPath, " is not a subdirectory of user's folder" );
+        Path destinationFile = full.resolve( file.getOriginalFilename() ).normalize();
+        if ( !destinationFile.startsWith( full ) )
+            throw new StorageException( "File " + file.getOriginalFilename() + " is not in directory " + subPath );
+        try ( InputStream inputStream = file.getInputStream() )
         {
-            if ( file.isEmpty() )
-                throw new StorageException( "File is empty" );
-            Path destinationFile = full.resolve( file.getOriginalFilename() ).normalize();
-            if ( !destinationFile.startsWith( full ) )
-                throw new StorageException( "File " + file.getOriginalFilename() + " is not in directory " + subPath );
-            try ( InputStream inputStream = file.getInputStream() )
-            {
-                Files.copy( inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING );
-            }
-            catch ( IOException e )
-            {
-                throw new StorageException( "Could not save file", e );
-            }
+            Files.copy( inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING );
         }
-        else
-            throw new StorageException( subPath + " is not a subdirectory of user's folder" );
+        catch ( IOException e )
+        {
+            throw new StorageException( "Could not save file", e );
+        }
     }
 
     @Override
     public void createSubDir( String dirname, String subPath, String dirName ) throws StorageException
     {
-        Path relative = getUserRoot( dirname );
-        Path full = relative.resolve( subPath ).normalize();
-        if ( full.startsWith( relative ) )
-        {
-            Path newDir = full.resolve( dirName ).normalize();
-            if ( !newDir.startsWith( full ) )
-                throw new StorageException( "Directory " + dirName + " is not in directory " + subPath );
-            this.createDirForPath( newDir );
-        }
-        else
-            throw new StorageException( subPath + " is not a subdirectory of user's folder" );
+        Path full = getFullPath( dirname, subPath, " is not a subdirectory of user's folder" );
+        Path newDir = full.resolve( dirName ).normalize();
+        if ( !newDir.startsWith( full ) )
+            throw new StorageException( "Directory " + dirName + " is not in directory " + subPath );
+        this.createDirForPath( newDir );
     }
 
     @Override
     public void delete( String dirname, String pathToFile ) throws StorageException
     {
-        Path relative = getUserRoot( dirname );
-        Path full = relative.resolve( pathToFile ).normalize();
-        if ( full.startsWith( relative ) )
+        Path full = getFullPath( dirname, pathToFile, " is not in directory" );
+        if ( !Files.exists( full ) ) throw new StorageException( "No such file" );
+        try
         {
-            if ( !Files.exists( full ) )
-                throw new StorageException( "No such file" );
-            try
-            {
-                if ( Files.isDirectory( full ) )
-                    FileSystemUtils.deleteRecursively( full );
-                else
-                    Files.delete( full );
-            }
-            catch ( IOException e )
-            {
-                throw new StorageException( "Could not delete file", e );
-            }
+            if ( Files.isDirectory( full ) ) FileSystemUtils.deleteRecursively( full );
+            else Files.delete( full );
         }
-        else
-            throw new StorageException( pathToFile + " is not in directory" );
+        catch ( IOException e )
+        {
+            throw new StorageException( "Could not delete file", e );
+        }
+    }
+
+    private void clearMainFolder()
+    {
+        FileSystemUtils.deleteRecursively( rootLocation.toFile() );
+    }
+
+    private Path getUserRoot( String dir )
+    {
+        return rootLocation.resolve( dir ).normalize();
+    }
+
+    private Path getFullPath( String dirname, String filePath, String errorMessage ) throws StorageException
+    {
+        Path relative = getUserRoot( dirname );
+        Path full = relative.resolve( filePath ).normalize();
+        if ( !full.startsWith( relative ) ) throw new StorageException( filePath + errorMessage );
+        return full;
     }
 
     private Stream<Path> getFilesInPath( Path full ) throws IOException
     {
-        return Files.walk( full, 1 )
-                .filter( path -> !full.equals( path ) );
+        return Files.walk( full, 1 ).filter( path -> !full.equals( path ) );
     }
 
     private void createDirForPath( Path dirPath ) throws StorageException
