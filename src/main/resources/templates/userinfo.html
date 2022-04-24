@@ -10,8 +10,8 @@
         <p>Your user name = <span sec:authentication="name">Username</span></p>
         <div sec:authorize="hasAuthority('Role_Admin')">
             <p>Your roles: </p>
-            <ul class="list-group list-group-horizontal-sm">
-                <li th:each="authority : ${#authentication.getAuthorities()}"
+            <ul class="list-group list-group-horizontal">
+                <li class="list-group-item" th:each="authority : ${#authentication.getAuthorities()}"
                     th:text="${authority.getAuthority()}"></li>
             </ul>
         </div>

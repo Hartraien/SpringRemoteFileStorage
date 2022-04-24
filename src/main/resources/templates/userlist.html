@@ -8,13 +8,19 @@
     <div class="container">
         <h1 class="text-center">List of users</h1>
         <form class="col-lg-6 offset-lg-3" method="get" th:action="@{/userlist}">
-            <div class="row justify-content-center">
+            <div class="row g-3 justify-content-center">
                 <input id="pageNew" name="page" type="hidden" value="0">
-                <label for="sizeNew">Users per page</label>
-                <input id="sizeNew" min="1" name="size" oninput="validity.valid||(value='');"
-                       th:value="${users.getSize()}"
-                       type="number">
-                <button class="btn btn-secondary" type="submit">Display</button>
+                <div class="col-auto">
+                    <label for="sizeNew">Users per page</label>
+                </div>
+                <div class="col-auto">
+                    <input class="form-control" id="sizeNew" min="1" name="size" oninput="validity.valid||(value='');"
+                           th:value="${users.getSize()}"
+                           type="number">
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-secondary" type="submit">Display</button>
+                </div>
             </div>
         </form>
         <table class="table">

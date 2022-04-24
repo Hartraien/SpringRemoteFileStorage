@@ -45,31 +45,34 @@
             </tbody>
         </table>
         <form class="col-lg-6 offset-lg-3" enctype="multipart/form-data" method="post" th:action="@{/uploadpage}">
-            <input name="path" th:value="${path}" type="hidden">
-            <table class="table">
-                <tr>
-                    <td>Choose file to upload:</td>
-                    <td><input name="file" type="file"/></td>
-                    <td>
-                        <button class="btn btn-secondary" type="submit">Upload file</button>
-                    </td>
-                </tr>
-            </table>
+            <div class="row g-3 justify-content-center">
+                <input name="path" th:value="${path}" type="hidden">
+                <div class="col-auto">
+                    <label for="file">Choose file to upload:</label>
+                </div>
+                <div class="col-auto">
+                    <input id="file" name="file" type="file" required="required"/>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-secondary" type="submit">Upload file</button>
+                </div>
+            </div>
         </form>
         <form class="col-lg-6 offset-lg-3" method="post" th:action="@{/makedir}">
-            <input name="path" th:value="${path}" type="hidden">
-            <table class="table">
-                <tr>
-                    <td>Input name of new directory:</td>
-                    <td>
-                        <input class="form-control" name="name" pattern="[A-Za-z0-9 ]{1,20}" required="required"
-                               type="text"/>
-                    </td>
-                    <td>
-                        <button class="btn btn-secondary" type="submit">Create directory</button>
-                    </td>
-                </tr>
-            </table>
+            <div class="row g-3 justify-content-center">
+                <input name="path" th:value="${path}" type="hidden">
+                <div class="col-auto">
+                    <label for="dirName">Input name of new directory:</label>
+                </div>
+                <div class="col-auto">
+                    <input id="dirName" class="form-control" name="name" pattern="[A-Za-z0-9 ]{1,20}"
+                           required="required"
+                           type="text"/>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-secondary" type="submit">Create directory</button>
+                </div>
+            </div>
         </form>
     </div>
 
