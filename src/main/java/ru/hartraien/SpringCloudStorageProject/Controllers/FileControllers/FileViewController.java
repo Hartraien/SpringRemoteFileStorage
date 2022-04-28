@@ -33,7 +33,6 @@ public class FileViewController extends AbstractFileController
     public String getPage( HttpServletRequest request, Authentication authentication, Model model )
     {
         String subPath = getSubPath( request );
-        System.err.println( "SubPath = " + subPath );
         String backPath = getBackPath( subPath );
         UserEntity user = getCurrentUser( authentication );
         List<FileDTO> filesInDir;

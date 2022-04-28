@@ -52,7 +52,6 @@ public class AbstractFileController
         String[] parts = request.getRequestURL().toString().split( basePath, 2 );
         if ( parts.length == 2 )
         {
-            System.err.println( parts[1] );
             return URLDecoder.decode( parts[1], StandardCharsets.UTF_8 );
         }
         else
