@@ -7,7 +7,8 @@
 </head>
 <body>
     <nav th:insert="fragments/navigationbar.html"></nav>
-    <p>Something is wrong</p>
-    <a th:href="@{/}">Main Page</a>
+    <div class="container">
+        <p>Page <span th:text="${url}"></span> raised exception <span th:text="${exception.getMessage()}"></span></p>
+    </div>
 </body>
 </html>

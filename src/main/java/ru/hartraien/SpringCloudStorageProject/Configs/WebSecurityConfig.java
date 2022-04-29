@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -18,11 +19,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
+    private final AccessDeniedHandler accessDeniedHandler;
+
     @Autowired
-    public WebSecurityConfig( UserDetailsService userDetailsService, PasswordEncoder passwordEncoder )
+    public WebSecurityConfig( UserDetailsService userDetailsService
+            , PasswordEncoder passwordEncoder
+            , AccessDeniedHandler accessDeniedHandler )
     {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.accessDeniedHandler = accessDeniedHandler;
     }
 
     @Bean
@@ -58,7 +64,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .logoutUrl( "/logout" )
                 .logoutSuccessUrl( "/" )
                 .invalidateHttpSession( true )
-                .permitAll();
+                .permitAll()
+                .and()
+                .exceptionHandling().accessDeniedHandler( accessDeniedHandler );
 
         http.headers().frameOptions().disable();
 
