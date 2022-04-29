@@ -13,7 +13,6 @@ import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
-import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Utility.RandomStringProducer;
 import ru.hartraien.SpringCloudStorageProject.Utility.StringProducer;
@@ -26,7 +25,6 @@ class UserServiceImplTest
 {
     private PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
-    private RoleService roleService;
     private DirService dirService;
     private StorageService storageService;
 
@@ -37,10 +35,9 @@ class UserServiceImplTest
     {
         passwordEncoder = Mockito.mock( PasswordEncoder.class );
         userRepository = Mockito.mock( UserRepository.class );
-        roleService = Mockito.mock( RoleService.class );
         dirService = Mockito.mock( DirService.class );
         storageService = Mockito.mock( StorageService.class );
-        userService = new UserServiceImpl( userRepository, roleService, dirService, storageService, passwordEncoder );
+        userService = new UserServiceImpl( userRepository, dirService, storageService, passwordEncoder );
     }
 
     @Test
@@ -56,8 +53,7 @@ class UserServiceImplTest
         user.setUsername( username );
         user.setPassword( password );
 
-        Role role = new Role();
-        role.setName( roleName );
+        Role role = Role.Role_User;
 
         DirectoryEntity directory = new DirectoryEntity();
         directory.setDirname( dirName );
@@ -70,7 +66,6 @@ class UserServiceImplTest
             return null;
         } );
         Mockito.when( passwordEncoder.encode( password ) ).thenReturn( encode_addition + password );
-        Mockito.when( roleService.findRoleByName( roleName ) ).thenReturn( role );
         Mockito.when( dirService.generateNewDir() ).thenReturn( directory );
 
         try
@@ -84,7 +79,6 @@ class UserServiceImplTest
 
         Mockito.verify( userRepository ).save( user );
         Mockito.verify( userRepository ).findUserByUsername( username );
-        Mockito.verify( roleService ).findRoleByName( roleName );
         Mockito.verify( passwordEncoder ).encode( password );
         Mockito.verify( dirService ).generateNewDir();
 

@@ -30,9 +30,7 @@ class UserDetailsServiceImplTest
     {
         String username = "username";
         String password = "password";
-        String roleName = "Role_User";
-        Role role = new Role();
-        role.setName( roleName );
+        Role role = Role.Role_User;
 
         UserEntity user = new UserEntity();
         user.setUsername( username );
@@ -45,7 +43,7 @@ class UserDetailsServiceImplTest
         Assertions.assertEquals( user.getUsername(), userFromService.getUsername() );
         Assertions.assertEquals( user.getPassword(), userFromService.getPassword() );
         Assertions.assertEquals(
-                user.getRoles().stream().map( Role::getName ).collect( Collectors.toSet() ),
+                user.getRoles().stream().map( Role::name ).collect( Collectors.toSet() ),
                 userFromService.getAuthorities().stream().map( GrantedAuthority::getAuthority ).collect( Collectors.toSet() )
         );
     }

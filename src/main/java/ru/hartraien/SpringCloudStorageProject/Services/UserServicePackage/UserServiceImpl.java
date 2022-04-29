@@ -13,7 +13,6 @@ import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
 import ru.hartraien.SpringCloudStorageProject.Repositories.UserRepository;
 import ru.hartraien.SpringCloudStorageProject.Services.DirServicePackage.DirService;
-import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageException;
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService
 {
     private final UserRepository userRepository;
-    private final RoleService roleService;
     private final DirService dirService;
 
     private final StorageService storageService;
@@ -38,10 +36,9 @@ public class UserServiceImpl implements UserService
     private final Logger logger;
 
     @Autowired
-    public UserServiceImpl( UserRepository userRepository, RoleService roleService, DirService dirService, StorageService storageService, PasswordEncoder passwordEncoder )
+    public UserServiceImpl( UserRepository userRepository, DirService dirService, StorageService storageService, PasswordEncoder passwordEncoder )
     {
         this.userRepository = userRepository;
-        this.roleService = roleService;
         this.dirService = dirService;
         this.storageService = storageService;
         this.passwordEncoder = passwordEncoder;
@@ -114,7 +111,7 @@ public class UserServiceImpl implements UserService
     private void processUser( UserEntity user ) throws UserServiceException
     {
         user.setPassword( passwordEncoder.encode( user.getPassword() ) );
-        Role role_user = roleService.findRoleByName( "Role_User" );
+        Role role_user = Role.Role_User;
         try
         {
             final DirectoryEntity directory = dirService.generateNewDir();
@@ -127,8 +124,7 @@ public class UserServiceImpl implements UserService
             logger.error( "Could not create directory for user: " + user.getUsername() );
             throw new UserServiceException( "Could not create directory for user", e );
         }
-        if ( role_user != null )
-            user.addRole( role_user );
+        user.addRole( role_user );
     }
 
     private UserEntity processUserAndReturnOrNull( UserEntity user )

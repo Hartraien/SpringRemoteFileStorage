@@ -53,7 +53,7 @@ class MainPageControllerTest
                 .andDo( MockMvcResultHandlers.print() )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
                 .andExpect( MockMvcResultMatchers.content().string( Matchers.containsString( "Login" ) ) )
-                .andExpect( MockMvcResultMatchers.content().string( Matchers.not( Matchers.containsString( "Your account page" ) )) )
+                .andExpect( MockMvcResultMatchers.content().string( Matchers.not( Matchers.containsString( "Your account page" ) ) ) )
                 .andExpect( MockMvcResultMatchers.content().string( Matchers.not( Matchers.containsString( "List of existing users" ) ) ) );
     }
 }

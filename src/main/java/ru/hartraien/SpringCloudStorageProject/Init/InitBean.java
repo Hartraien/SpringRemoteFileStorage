@@ -10,7 +10,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import ru.hartraien.SpringCloudStorageProject.Entities.Role;
 import ru.hartraien.SpringCloudStorageProject.Entities.UserEntity;
-import ru.hartraien.SpringCloudStorageProject.Services.RoleServicePackage.RoleService;
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserServiceException;
@@ -31,7 +30,6 @@ import java.util.List;
 @Component
 public class InitBean
 {
-    private final RoleService roleService;
     private final UserService userService;
     private final StorageService storageService;
 
@@ -41,9 +39,8 @@ public class InitBean
 
 
     @Autowired
-    public InitBean( RoleService roleService, UserService userService, StorageService storageService, ApplicationContext context )
+    public InitBean( UserService userService, StorageService storageService, ApplicationContext context )
     {
-        this.roleService = roleService;
         this.userService = userService;
         this.storageService = storageService;
         this.context = context;
@@ -58,15 +55,11 @@ public class InitBean
     @EventListener(ApplicationStartedEvent.class)
     public void onApplicationStart( ApplicationStartedEvent event )
     {
-        Role userRole = new Role();
-        userRole.setName( "Role_User" );
+        Role userRole = Role.Role_User;
 
-        roleService.save( userRole );
 
-        Role adminRole = new Role();
-        adminRole.setName( "Role_Admin" );
+        Role adminRole = Role.Role_Admin;
 
-        roleService.save( adminRole );
 
         UserEntity admin = generateAdminUser( userRole, adminRole );
         try

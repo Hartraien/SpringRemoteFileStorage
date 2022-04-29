@@ -4,7 +4,6 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -15,14 +14,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.hartraien.SpringCloudStorageProject.Configs.WebSecurityConfig;
 import ru.hartraien.SpringCloudStorageProject.ConfigsForTest.TestConfig;
-import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 @WebMvcTest
 @ContextConfiguration(classes = { WebSecurityConfig.class, UserInfoController.class })
 @Import(TestConfig.class)
 class UserInfoControllerTest
 {
-
 
 
     @Autowired
@@ -37,7 +34,7 @@ class UserInfoControllerTest
                 .andExpect( MockMvcResultMatchers.status().is3xxRedirection() );
     }
 
-    @WithMockUser(username = "spring", authorities = {"Role_User"})
+    @WithMockUser(username = "spring", authorities = { "Role_User" })
     @Test
     void getPageAuth() throws Exception
     {
