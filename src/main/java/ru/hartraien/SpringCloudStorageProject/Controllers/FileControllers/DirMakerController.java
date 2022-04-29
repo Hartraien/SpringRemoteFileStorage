@@ -30,7 +30,7 @@ public class DirMakerController extends AbstractFileController
     public String makeDir( @RequestParam("name") String dirName,
                            @RequestParam("path") String path,
                            Authentication authentication,
-                           RedirectAttributes redirectAttributes )
+                           RedirectAttributes redirectAttributes ) throws StorageException, DirectoryException
     {
         UserEntity user = getCurrentUser( authentication );
         try
@@ -41,7 +41,7 @@ public class DirMakerController extends AbstractFileController
         catch ( DirectoryException | StorageException e )
         {
             getLogger().warn( "Could not create directory " + dirName, e );
-            redirectAttributes.addAttribute( "error", e.getMessage() );
+            throw e;
         }
         return "redirect:/viewfiles/" + path;
     }

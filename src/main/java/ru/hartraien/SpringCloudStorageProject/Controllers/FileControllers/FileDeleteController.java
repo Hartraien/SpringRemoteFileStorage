@@ -28,7 +28,7 @@ public class FileDeleteController extends AbstractFileController
     public String deleteFile( @RequestParam("pathToFile") String pathToFile,
                               @RequestParam("redirectPath") String path,
                               RedirectAttributes redirectAttributes,
-                              Authentication authentication )
+                              Authentication authentication ) throws StorageException, DirectoryException
     {
         UserEntity user = getCurrentUser( authentication );
         try
@@ -39,7 +39,7 @@ public class FileDeleteController extends AbstractFileController
         catch ( DirectoryException | StorageException e )
         {
             getLogger().warn( "Could not delete file = " + pathToFile, e );
-            redirectAttributes.addAttribute( "error", e.getMessage() );
+            throw e;
         }
         return "redirect:/viewfiles/" + path;
     }
