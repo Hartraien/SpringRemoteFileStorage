@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .authorizeRequests()
                 .antMatchers( "/lockedpage", "/uploadpage/**", "/download/**", "/viewfiles/**", "/userinfo/**", "/makedir" ).hasAnyAuthority( "Role_Admin", "Role_User" )
                 .antMatchers( "/userlist/**" ).hasAuthority( "Role_Admin" )
-                .antMatchers( "/", "/register" ).permitAll()
+                .antMatchers( "/", "/register", "/forgot_password/**", "/reset_password/**" ).permitAll()
                 .antMatchers( "/**" ).authenticated()
                 .anyRequest().authenticated()
                 .and()

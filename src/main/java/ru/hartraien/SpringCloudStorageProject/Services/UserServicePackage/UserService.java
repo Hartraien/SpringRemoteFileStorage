@@ -48,4 +48,35 @@ public interface UserService
      * @param entities - list of users to save
      */
     void saveAll( List<UserEntity> entities );
+
+    /**
+     * Dinf customer by email and update it's reset token
+     *
+     * @param token - token to set
+     * @param email - email of a user
+     */
+    void updateResetPasswordToken( String token, String email ) throws UserServiceException;
+
+    /**
+     * finds user by token
+     *
+     * @param token = token to find by
+     * @return - user with given token of null
+     */
+    UserEntity findUserByResetPasswordToken( String token );
+
+    /**
+     * Change password of a user
+     *
+     * @param user        - User to change password of
+     * @param newPassword - new password
+     */
+    void updatePassword( UserEntity user, String newPassword );
+
+    /**
+     * updates user's fields
+     *
+     * @param user - user to update
+     */
+    void update( UserEntity user );
 }

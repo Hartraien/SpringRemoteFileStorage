@@ -114,6 +114,7 @@ public class InitBean
     private UserEntity generateAdminUser( Role userRole, Role adminRole )
     {
         UserEntity admin = new UserEntity();
+        admin.setEmail( "hartra@yandex.ru" );
         admin.setUsername( "admin" );
         admin.setPassword( "1234" );
         admin.addRole( adminRole );

@@ -16,10 +16,14 @@ public class UserEntity
     private String username;
     private String password;
 
+    private String email;
+
+    private String resetPasswordToken;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @JoinTable(name="User_Roles", joinColumns = @JoinColumn(name="username"))
+    @JoinTable(name = "User_Roles", joinColumns = @JoinColumn(name = "username"))
     @Enumerated(EnumType.STRING)
-    @Column(name="role")
+    @Column(name = "role")
     private Set<Role> roles;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -102,4 +106,23 @@ public class UserEntity
         return Objects.hash( username, password );
     }
 
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail( String email )
+    {
+        this.email = email;
+    }
+
+    public String getResetPasswordToken()
+    {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken( String resetPasswordToken )
+    {
+        this.resetPasswordToken = resetPasswordToken;
+    }
 }

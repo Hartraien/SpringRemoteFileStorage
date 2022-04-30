@@ -12,6 +12,8 @@
         <div sec:authorize="!isAuthenticated()">
             <p th:if="${error_message}" th:text="${error_message}"></p>
             <form method="post" th:action="@{/register}" th:object="${userForm}">
+                <label for="femail">Email</label><br>
+                <input id="femail" name="femail" th:field="*{email}" type="text"><br>
                 <label for="fusername">Username</label><br>
                 <input id="fusername" name="fusername" required th:field="*{username}" type="text"><br>
                 <label for="fpassword">Password</label><br>

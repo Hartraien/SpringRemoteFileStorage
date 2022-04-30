@@ -108,6 +108,54 @@ public class UserServiceImpl implements UserService
         userRepository.saveAll( users );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional
+    public void updateResetPasswordToken( String token, String email ) throws UserServiceException
+    {
+        UserEntity user = userRepository.findOneByEmail( email );
+        if ( user != null )
+        {
+            user.setResetPasswordToken( token );
+            update( user );
+        }
+        else
+            throw new UserServiceException( "Could not find user with email " + email );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public UserEntity findUserByResetPasswordToken( String token )
+    {
+        return userRepository.findUserByResetPasswordToken( token );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional
+    public void updatePassword( UserEntity user, String newPassword )
+    {
+        user.setPassword( passwordEncoder.encode( newPassword ) );
+        user.setResetPasswordToken( null );
+        update( user );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional
+    public void update( UserEntity user )
+    {
+        userRepository.save( user );
+    }
+
     private void processUser( UserEntity user ) throws UserServiceException
     {
         user.setPassword( passwordEncoder.encode( user.getPassword() ) );
