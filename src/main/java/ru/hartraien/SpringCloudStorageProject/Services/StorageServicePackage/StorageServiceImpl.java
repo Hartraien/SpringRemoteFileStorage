@@ -14,9 +14,8 @@ import ru.hartraien.SpringCloudStorageProject.DTOs.FileDTOComparator;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -163,6 +162,41 @@ public class StorageServiceImpl implements StorageService
         {
             logger.error( "Could not delete file " + full.getFileName(), e );
             throw new StorageException( "Could not delete file", e );
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clearFolder( String dir ) throws StorageException
+    {
+        Path full = getUserRoot( dir );
+        try
+        {
+            Files.walkFileTree( full, new SimpleFileVisitor<>()
+            {
+                @Override
+                public FileVisitResult visitFile( Path file, BasicFileAttributes attrs ) throws IOException
+                {
+                    Files.delete( file );
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory( Path dir, IOException exc ) throws IOException
+                {
+                    if ( !dir.equals( full ) )
+                        Files.delete( dir );
+                    return FileVisitResult.CONTINUE;
+                }
+            } );
+        }
+        catch ( IOException e )
+        {
+            String error_message = "Could not clear folder";
+            logger.error( error_message, e );
+            throw new StorageException( error_message, e );
         }
     }
 

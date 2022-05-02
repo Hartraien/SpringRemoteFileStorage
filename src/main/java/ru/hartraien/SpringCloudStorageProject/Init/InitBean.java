@@ -35,25 +35,27 @@ public class InitBean
     private final StorageService storageService;
 
     private final ApplicationContext context;
-
+    private final Logger logger;
     private String adminUsername;
     private String adminPassword;
 
-    private final Logger logger;
+    private String adminEmail;
 
 
     @Autowired
     public InitBean( UserService userService
             , StorageService storageService
             , ApplicationContext context
-            , @Value( "${admin.username}" ) String adminUsername
-            , @Value( "${admin.password}" ) String adminPassword )
+            , @Value("${admin.username}") String adminUsername
+            , @Value("${admin.password}") String adminPassword
+            , @Value("${admin.email}") String adminEmail )
     {
         this.userService = userService;
         this.storageService = storageService;
         this.context = context;
         this.adminUsername = adminUsername;
         this.adminPassword = adminPassword;
+        this.adminEmail = adminEmail;
         logger = LoggerFactory.getLogger( InitBean.class );
     }
 
@@ -92,6 +94,7 @@ public class InitBean
 
         adminUsername = null;
         adminPassword = null;
+        adminEmail = null;
     }
 
     private void fillAdminDir( UserEntity admin )
@@ -127,7 +130,7 @@ public class InitBean
     private UserEntity generateAdminUser( Role userRole, Role adminRole )
     {
         UserEntity admin = new UserEntity();
-        admin.setEmail( "hartra@yandex.ru" );
+        admin.setEmail( adminEmail );
         admin.setUsername( adminUsername );
         admin.setPassword( adminPassword );
         admin.addRole( adminRole );

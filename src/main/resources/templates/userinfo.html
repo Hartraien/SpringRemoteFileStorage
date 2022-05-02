@@ -15,7 +15,22 @@
                     th:text="${authority.getAuthority()}"></li>
             </ul>
         </div>
-        <form method="post" th:action="@{/clearFolder}">
+
+        <div>
+            <div class="alert alert-primary" th:if="${change_password_message}"
+                 th:text="${change_password_message}"></div>
+            <div class="alert alert-danger" th:if="${change_password_error}"
+                 th:text="${change_password_error}"></div>
+            <form method="post" th:action="@{/changepassword}">
+                <label for="new_pass">New password</label>
+                <input class="form-control" name="new_password" id="new_pass" required type="text">
+                <label for="new_pass_copy">New password again</label>
+                <input class="form-control" name="new_password_copy" id="new_pass_copy" required type="text">
+                <button class="btn btn-secondary" type="submit">Change password</button>
+            </form>
+        </div>
+
+        <form method="post" th:action="@{/clear_folder}">
             <button class="btn btn-danger" type="submit">Delete all my files</button>
         </form>
         <form method="post" th:action="@{/logout}">

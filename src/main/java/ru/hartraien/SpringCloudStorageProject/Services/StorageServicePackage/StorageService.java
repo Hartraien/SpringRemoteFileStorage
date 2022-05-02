@@ -69,4 +69,10 @@ public interface StorageService
      * @throws StorageException - if could not delete given file
      */
     void delete( String dirname, String pathToFile ) throws StorageException;
+
+    /**
+     * Clears user's folder
+     * @param dir - dir to clear
+     */
+    void clearFolder( String dir ) throws StorageException;
 }
