@@ -3,6 +3,7 @@ package ru.hartraien.SpringCloudStorageProject.Init;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationContext;
@@ -35,15 +36,24 @@ public class InitBean
 
     private final ApplicationContext context;
 
+    private String adminUsername;
+    private String adminPassword;
+
     private final Logger logger;
 
 
     @Autowired
-    public InitBean( UserService userService, StorageService storageService, ApplicationContext context )
+    public InitBean( UserService userService
+            , StorageService storageService
+            , ApplicationContext context
+            , @Value( "${admin.username}" ) String adminUsername
+            , @Value( "${admin.password}" ) String adminPassword )
     {
         this.userService = userService;
         this.storageService = storageService;
         this.context = context;
+        this.adminUsername = adminUsername;
+        this.adminPassword = adminPassword;
         logger = LoggerFactory.getLogger( InitBean.class );
     }
 
@@ -79,6 +89,9 @@ public class InitBean
         logger.info( "admin directory = " + admin.getDir().getDirname() );
 
         fillAdminDir( admin );
+
+        adminUsername = null;
+        adminPassword = null;
     }
 
     private void fillAdminDir( UserEntity admin )
@@ -115,8 +128,8 @@ public class InitBean
     {
         UserEntity admin = new UserEntity();
         admin.setEmail( "hartra@yandex.ru" );
-        admin.setUsername( "admin" );
-        admin.setPassword( "1234" );
+        admin.setUsername( adminUsername );
+        admin.setPassword( adminPassword );
         admin.addRole( adminRole );
         admin.addRole( userRole );
         return admin;
