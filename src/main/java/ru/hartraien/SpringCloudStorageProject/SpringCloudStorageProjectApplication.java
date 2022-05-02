@@ -6,6 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @PropertySource( "classpath:mail.properties" )
+@PropertySource( "classpath:credentials.properties" )
 public class SpringCloudStorageProjectApplication
 {
 

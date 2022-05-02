@@ -33,3 +33,4 @@ build/
 .vscode/
 /storage/
 /AdminFolderContent/
+/src/main/resources/credentials.properties
