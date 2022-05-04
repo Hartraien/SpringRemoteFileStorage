@@ -17,6 +17,7 @@
         <java.version>11</java.version>
         <start-class>ru.hartraien.SpringCloudStorageProject.SpringCloudStorageProjectApplication</start-class>
         <h2.version>2.1.212</h2.version>
+        <mysql.version>8.0.29</mysql.version>
     </properties>
 
 
@@ -61,13 +62,21 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+
+
         <!-- database, for now we will use in-memory h2 -->
         <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
-            <scope>runtime</scope>
+            <scope>test</scope>
         </dependency>
 
 

@@ -62,9 +62,9 @@ public class InitBean
     /**
      * Waits for application stratup to add roles and users to db
      *
-     * @param event - refrence to listened event, ignored
+     * @param event - reference to listened event, ignored
      */
-    @EventListener(ApplicationStartedEvent.class)
+    //@EventListener(ApplicationStartedEvent.class)
     public void onApplicationStart( ApplicationStartedEvent event )
     {
         Role userRole = Role.Role_User;

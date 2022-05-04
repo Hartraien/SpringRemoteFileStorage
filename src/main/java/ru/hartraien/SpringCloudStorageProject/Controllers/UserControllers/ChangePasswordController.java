@@ -25,8 +25,7 @@ public class ChangePasswordController
 
     @PostMapping
     public String changePassword(
-            @RequestParam("previous_password") String prev_pass
-            , @RequestParam("new_password") String new_pass
+            @RequestParam("new_password") String new_pass
             , @RequestParam("new_password_copy") String new_pass_copy
             , Authentication authentication
             , RedirectAttributes redirectAttributes )
