@@ -1,0 +1,35 @@
+version: '3'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: DockerFile
+    container_name: app
+    ports:
+      - "8080:8080"
+    restart: on-failure
+    environment:
+      - spring.datasource.url=jdbc:postgresql://db:5432/db_spring_storage
+      - spring.jpa.hibernate.ddl-auto=update
+      - spring.datasource.username=compose-postgres
+      - spring.datasource.password=compose-postgres
+      - spring.datasource.driver-class-name=org.postgresql.Driver
+    networks:
+      - spring-storage-networks
+    depends_on:
+      - db
+
+  db:
+    image: 'postgres:14.2-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_DB=db_spring_storage
+      - POSTGRES_USER=compose-postgres
+      - POSTGRES_PASSWORD=compose-postgres
+    ports:
+      - "5432:5432"
+    networks:
+      spring-storage-networks:
+
+networks:
+  spring-storage-networks:

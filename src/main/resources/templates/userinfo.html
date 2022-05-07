@@ -23,9 +23,9 @@
                  th:text="${change_password_error}"></div>
             <form method="post" th:action="@{/changepassword}">
                 <label for="new_pass">New password</label>
-                <input class="form-control" name="new_password" id="new_pass" required type="text">
+                <input class="form-control" id="new_pass" name="new_password" required type="text">
                 <label for="new_pass_copy">New password again</label>
-                <input class="form-control" name="new_password_copy" id="new_pass_copy" required type="text">
+                <input class="form-control" id="new_pass_copy" name="new_password_copy" required type="text">
                 <button class="btn btn-secondary" type="submit">Change password</button>
             </form>
         </div>

@@ -8,7 +8,7 @@ import java.util.Objects;
 public class DirectoryEntity
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "direntity_seq")
     private Long id;
 
     private String dirname;

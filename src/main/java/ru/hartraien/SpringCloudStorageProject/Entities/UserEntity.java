@@ -10,7 +10,7 @@ import java.util.Set;
 public class UserEntity
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userentity_seq")
     private Long id;
 
     private String username;

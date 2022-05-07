@@ -72,6 +72,7 @@ public interface StorageService
 
     /**
      * Clears user's folder
+     *
      * @param dir - dir to clear
      */
     void clearFolder( String dir ) throws StorageException;
