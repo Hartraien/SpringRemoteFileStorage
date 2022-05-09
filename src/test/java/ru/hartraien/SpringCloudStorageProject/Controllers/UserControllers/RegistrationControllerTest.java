@@ -22,7 +22,7 @@ import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserSe
 import ru.hartraien.SpringCloudStorageProject.Validators.UserValidator;
 
 @WebMvcTest
-@ContextConfiguration(classes = { BeanConfig.class,WebSecurityConfig.class, RegistrationController.class })
+@ContextConfiguration(classes = { BeanConfig.class, WebSecurityConfig.class, RegistrationController.class })
 @Import(TestConfig.class)
 class RegistrationControllerTest
 {

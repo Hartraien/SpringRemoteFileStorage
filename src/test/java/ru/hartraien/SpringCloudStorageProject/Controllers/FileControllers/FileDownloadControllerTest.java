@@ -26,7 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
 @WebMvcTest
-@ContextConfiguration(classes = { BeanConfig.class,WebSecurityConfig.class, FileDownloadController.class })
+@ContextConfiguration(classes = { BeanConfig.class, WebSecurityConfig.class, FileDownloadController.class })
 @Import(TestConfig.class)
 class FileDownloadControllerTest
 {

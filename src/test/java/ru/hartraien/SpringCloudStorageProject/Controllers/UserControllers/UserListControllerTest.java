@@ -18,13 +18,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.hartraien.SpringCloudStorageProject.Configs.BeanConfig;
 import ru.hartraien.SpringCloudStorageProject.Configs.WebSecurityConfig;
 import ru.hartraien.SpringCloudStorageProject.ConfigsForTest.TestConfig;
-import ru.hartraien.SpringCloudStorageProject.Controllers.ContextAnnotations.BasicContextConfiguration;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 import java.util.ArrayList;
 
 @WebMvcTest
-@ContextConfiguration(classes = { BeanConfig.class, WebSecurityConfig.class,UserListController.class})
+@ContextConfiguration(classes = { BeanConfig.class, WebSecurityConfig.class, UserListController.class })
 @Import(TestConfig.class)
 class UserListControllerTest
 {

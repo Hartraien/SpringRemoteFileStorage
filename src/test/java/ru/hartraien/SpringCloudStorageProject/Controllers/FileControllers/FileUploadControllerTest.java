@@ -26,7 +26,7 @@ import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserSe
 import java.nio.charset.StandardCharsets;
 
 @WebMvcTest
-@ContextConfiguration(classes = { BeanConfig.class,WebSecurityConfig.class, FileUploadController.class })
+@ContextConfiguration(classes = { BeanConfig.class, WebSecurityConfig.class, FileUploadController.class })
 @Import(TestConfig.class)
 class FileUploadControllerTest
 {

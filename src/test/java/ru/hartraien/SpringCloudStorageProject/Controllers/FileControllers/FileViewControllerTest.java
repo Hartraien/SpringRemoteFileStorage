@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 
 @WebMvcTest
-@ContextConfiguration(classes = { BeanConfig.class,WebSecurityConfig.class, FileViewController.class })
+@ContextConfiguration(classes = { BeanConfig.class, WebSecurityConfig.class, FileViewController.class })
 @Import(TestConfig.class)
 class FileViewControllerTest
 {

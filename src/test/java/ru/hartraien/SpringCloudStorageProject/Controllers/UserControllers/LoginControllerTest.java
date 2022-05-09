@@ -18,7 +18,7 @@ import ru.hartraien.SpringCloudStorageProject.ConfigsForTest.TestConfig;
 
 
 @WebMvcTest
-@ContextConfiguration(classes = { BeanConfig.class,WebSecurityConfig.class, LoginController.class })
+@ContextConfiguration(classes = { BeanConfig.class, WebSecurityConfig.class, LoginController.class })
 @Import(TestConfig.class)
 class LoginControllerTest
 {
