@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.hartraien.SpringCloudStorageProject.Configs.BeanConfig;
 import ru.hartraien.SpringCloudStorageProject.Configs.WebSecurityConfig;
 import ru.hartraien.SpringCloudStorageProject.ConfigsForTest.TestConfig;
 import ru.hartraien.SpringCloudStorageProject.Entities.DirectoryEntity;
@@ -25,7 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
 @WebMvcTest
-@ContextConfiguration(classes = { WebSecurityConfig.class, FileDownloadController.class })
+@ContextConfiguration(classes = { BeanConfig.class,WebSecurityConfig.class, FileDownloadController.class })
 @Import(TestConfig.class)
 class FileDownloadControllerTest
 {

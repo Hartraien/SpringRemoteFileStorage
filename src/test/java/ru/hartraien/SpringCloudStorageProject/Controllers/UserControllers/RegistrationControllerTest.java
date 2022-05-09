@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.hartraien.SpringCloudStorageProject.Configs.BeanConfig;
 import ru.hartraien.SpringCloudStorageProject.Configs.WebSecurityConfig;
 import ru.hartraien.SpringCloudStorageProject.ConfigsForTest.TestConfig;
 import ru.hartraien.SpringCloudStorageProject.Services.SecurityServicePackage.SecurityService;
@@ -21,7 +22,7 @@ import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserSe
 import ru.hartraien.SpringCloudStorageProject.Validators.UserValidator;
 
 @WebMvcTest
-@ContextConfiguration(classes = { WebSecurityConfig.class, RegistrationController.class })
+@ContextConfiguration(classes = { BeanConfig.class,WebSecurityConfig.class, RegistrationController.class })
 @Import(TestConfig.class)
 class RegistrationControllerTest
 {

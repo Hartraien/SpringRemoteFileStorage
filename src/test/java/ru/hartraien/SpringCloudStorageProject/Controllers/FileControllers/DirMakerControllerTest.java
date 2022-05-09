@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.hartraien.SpringCloudStorageProject.Configs.BeanConfig;
 import ru.hartraien.SpringCloudStorageProject.Configs.WebSecurityConfig;
 import ru.hartraien.SpringCloudStorageProject.ConfigsForTest.TestConfig;
 import ru.hartraien.SpringCloudStorageProject.Entities.DirectoryEntity;
@@ -21,7 +22,7 @@ import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.Sto
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 @WebMvcTest
-@ContextConfiguration(classes = { WebSecurityConfig.class, DirMakerController.class })
+@ContextConfiguration(classes = { BeanConfig.class, WebSecurityConfig.class, DirMakerController.class })
 @Import(TestConfig.class)
 class DirMakerControllerTest
 {

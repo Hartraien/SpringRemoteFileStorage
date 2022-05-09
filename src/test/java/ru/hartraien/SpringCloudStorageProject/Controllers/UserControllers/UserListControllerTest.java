@@ -15,14 +15,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.hartraien.SpringCloudStorageProject.Configs.BeanConfig;
 import ru.hartraien.SpringCloudStorageProject.Configs.WebSecurityConfig;
 import ru.hartraien.SpringCloudStorageProject.ConfigsForTest.TestConfig;
+import ru.hartraien.SpringCloudStorageProject.Controllers.ContextAnnotations.BasicContextConfiguration;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
 import java.util.ArrayList;
 
 @WebMvcTest
-@ContextConfiguration(classes = { WebSecurityConfig.class, UserListController.class })
+@ContextConfiguration(classes = { BeanConfig.class, WebSecurityConfig.class,UserListController.class})
 @Import(TestConfig.class)
 class UserListControllerTest
 {
@@ -35,7 +37,7 @@ class UserListControllerTest
 
     @WithAnonymousUser
     @Test
-    void getPartialListAnon() throws Exception
+    void getPartialList_asAnon() throws Exception
     {
         this.mockMvc.perform( MockMvcRequestBuilders.get( "/userlist" ) )
                 .andDo( MockMvcResultHandlers.print() )
@@ -44,16 +46,18 @@ class UserListControllerTest
 
     @WithMockUser(username = "spring", authorities = { "Role_User" })
     @Test
-    void getPartialListUser() throws Exception
+    void getPartialList_asUser() throws Exception
     {
+        Mockito.when( userService.getAllUsersPaging( Mockito.any() ) ).thenReturn( new PageImpl<>( new ArrayList<>() ) );
+
         this.mockMvc.perform( MockMvcRequestBuilders.get( "/userlist" ) )
                 .andDo( MockMvcResultHandlers.print() )
-                .andExpect( MockMvcResultMatchers.status().isForbidden() );
+                .andExpect( MockMvcResultMatchers.status().is3xxRedirection() );
     }
 
     @WithMockUser(username = "spring", authorities = { "Role_User", "Role_Admin" })
     @Test
-    void getPartialListAdmin() throws Exception
+    void getPartialList_asAdmin() throws Exception
     {
         Mockito.when( userService.getAllUsersPaging( Mockito.any() ) ).thenReturn( new PageImpl<>( new ArrayList<>() ) );
 

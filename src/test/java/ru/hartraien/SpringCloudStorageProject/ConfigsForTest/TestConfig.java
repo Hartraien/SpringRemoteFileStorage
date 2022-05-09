@@ -12,11 +12,6 @@ import java.util.ArrayList;
 @TestConfiguration
 public class TestConfig
 {
-    @Bean
-    public PasswordEncoder passwordEncoder()
-    {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public UserDetailsService userDetailsService()

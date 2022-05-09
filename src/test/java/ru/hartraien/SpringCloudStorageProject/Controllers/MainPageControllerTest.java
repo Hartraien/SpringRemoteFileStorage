@@ -12,11 +12,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.hartraien.SpringCloudStorageProject.Configs.BeanConfig;
 import ru.hartraien.SpringCloudStorageProject.Configs.WebSecurityConfig;
 import ru.hartraien.SpringCloudStorageProject.ConfigsForTest.TestConfig;
 
 @WebMvcTest
-@ContextConfiguration(classes = { WebSecurityConfig.class, MainPageController.class })
+@ContextConfiguration(classes = { BeanConfig.class, WebSecurityConfig.class, MainPageController.class })
 @Import(TestConfig.class)
 class MainPageControllerTest
 {
