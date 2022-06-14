@@ -6,6 +6,7 @@
 <body>
     <nav th:insert="fragments/navigationbar.html :: navigation_bar"></nav>
     <div class="container">
+        <div th:insert="fragments/messages"></div>
         <p>You tried to access secured page but you do not have rights</p><br>
         <p>You can return to main page using navigation bar above</p>
     </div>

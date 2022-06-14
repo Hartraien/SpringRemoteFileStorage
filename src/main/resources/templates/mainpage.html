@@ -6,6 +6,7 @@
 <body>
     <nav th:insert="fragments/navigationbar.html ::navigation_bar"></nav>
     <div class="container">
+        <div th:insert="fragments/messages"></div>
         <h1 class="text-center">Hello!</h1>
         <ul class="list-group">
             <li class="list-group-item" sec:authorize="!isAuthenticated()">

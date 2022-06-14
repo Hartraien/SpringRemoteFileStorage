@@ -6,6 +6,7 @@
 <body>
     <nav th:insert="fragments/navigationbar.html :: navigation_bar"></nav>
     <div class="container">
+        <div th:insert="fragments/messages"></div>
         <h1 class="text-center">List of users</h1>
         <form class="col-lg-6 offset-lg-3" method="get" th:action="@{/userlist}">
             <div class="row g-3 justify-content-center">

@@ -9,6 +9,7 @@
 <body>
     <nav th:insert="fragments/navigationbar.html :: navigation_bar"></nav>
     <div class="container">
+        <div th:insert="fragments/messages"></div>
         <p th:if="${message}" th:text="${message}"></p>
         <div sec:authorize="isAuthenticated()">
             <span sec:authentication="name">Username</span>

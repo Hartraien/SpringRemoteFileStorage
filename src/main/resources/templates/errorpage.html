@@ -8,6 +8,7 @@
 <body>
     <nav th:insert="fragments/navigationbar.html"></nav>
     <div class="container">
+        <div th:insert="fragments/messages"></div>
         <p>Page <span th:text="${url}"></span> raised exception <span th:text="${exception.getMessage()}"></span></p>
     </div>
     <footer th:insert="fragments/footer.html"></footer>

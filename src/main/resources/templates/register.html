@@ -9,24 +9,24 @@
 <body>
     <nav th:insert="fragments/navigationbar.html ::navigation_bar"></nav>
     <div class="container">
+        <div th:insert="fragments/messages"></div>
         <div sec:authorize="!isAuthenticated()">
-            <p th:if="${error_message}" th:text="${error_message}"></p>
             <form method="post" th:action="@{/register}" th:object="${userForm}">
                 <table>
                     <tr>
-                        <td><label for="femail">Email</label></td>
-                        <td><input id="femail" name="email" required th:field="*{email}" type="text"></td>
+                        <td><label for="email">Email</label></td>
+                        <td><input id="email" name="email" required th:field="*{email}" type="text"></td>
                         <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</td>
                     </tr>
                     <tr>
                         <td><label for="username">Username</label></td>
                         <td><input id="username" name="username" required th:field="*{username}" type="text"></td>
-                        <td th:if="${#fields.hasErrors('username')}" th:errors="*{email}">Email error</td>
+                        <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</td>
                     </tr>
                     <tr>
                         <td><label for="password">Password</label></td>
                         <td><input id="password" name="password" required th:field="*{password}" type="text"></td>
-                        <td th:if="${#fields.hasErrors('password')}" th:errors="*{email}">Email error</td>
+                        <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</td>
                     </tr>
                     <tr>
                         <td><input type="submit" value="Register"></td>

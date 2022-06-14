@@ -7,6 +7,7 @@
 <body>
     <nav th:insert="fragments/navigationbar.html :: navigation_bar"></nav>
     <div class="container">
+        <div th:insert="fragments/messages"></div>
         <p>Your user name = <span sec:authentication="name">Username</span></p>
         <div sec:authorize="hasAuthority('Role_Admin')">
             <p>Your roles: </p>

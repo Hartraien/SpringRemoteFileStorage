@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header.html :: header(title='messages')">
+<body>
+<div th:fragment="messages">
+    <div class="alert alert-danger" th:if="${error_message}" th:text="${error_message}"></div>
+    <div class="alert alert-success" th:if="${success_message}" th:text="${success_message}"></div>
+</div>
+</body>
+</html>

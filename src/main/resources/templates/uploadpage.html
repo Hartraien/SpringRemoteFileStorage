@@ -10,6 +10,7 @@
     <nav th:insert="fragments/navigationbar.html :: navigation_bar"></nav>
 
     <div class="container">
+        <div th:insert="fragments/messages"></div>
         <h1 class="text-center">File storage of <span sec:authentication="name">Username</span></h1>
         <table class="table">
             <thead class="thead-dark">

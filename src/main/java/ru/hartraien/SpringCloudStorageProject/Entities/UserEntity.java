@@ -27,7 +27,7 @@ public class UserEntity
 
     @NotNull
     @NotBlank(message = "Email should not be empty")
-    @Email
+    @Email(message = "This email is not of valid format: [smth]@[smth].[smth]")
     private String email;
 
     private String resetPasswordToken;

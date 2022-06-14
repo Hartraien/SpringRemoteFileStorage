@@ -9,59 +9,55 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Validated
-public class UserEntityDTO
-{
+public class UserEntityDTO {
     @NotNull
     @NotBlank(message = "Username should not be empty")
     private String username;
-    @NotNull
-    @NotBlank(message = "Password should not be empty")
+    @ValidPassword
     private String password;
     @NotNull
     @NotBlank(message = "Email should not be empty")
-    @Email
+    @Email(message = "This email is not of valid format: [smth]@[smth].[smth]")
     private String email;
 
-    public UserEntityDTO()
-    {
+    public UserEntityDTO() {
     }
 
-    public String getUsername()
-    {
+    public UserEntityDTO(UserEntity entity) {
+        this.username = entity.getUsername();
+        this.password = entity.getPassword();
+        this.email = entity.getEmail();
+    }
+
+    public String getUsername() {
         return username;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public void setUsername( String username )
-    {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public void setPassword( String password )
-    {
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setEmail( String email )
-    {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public UserEntity toUserEntity()
-    {
+    public UserEntity toUserEntity() {
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername( username );
-        userEntity.setPassword( password );
-        userEntity.setEmail( email );
+        userEntity.setUsername(username);
+        userEntity.setPassword(password);
+        userEntity.setEmail(email);
         return userEntity;
     }
 }

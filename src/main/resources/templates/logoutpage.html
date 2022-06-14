@@ -7,8 +7,9 @@
 <body>
     <nav th:insert="fragments/navigationbar.html ::navigation_bar"></nav>
     <div class="container">
+        <div th:insert="fragments/messages"></div>
         <p>You have successfully logged out</p>
-        <a th:href="@(/)">Go to main page</a>
+        <a th:href="@{/}"></a>
     </div>
     <footer th:insert="fragments/footer.html :: footer"></footer>
 </body>
