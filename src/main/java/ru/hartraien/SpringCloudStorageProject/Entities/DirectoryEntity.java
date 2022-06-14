@@ -1,6 +1,8 @@
 package ru.hartraien.SpringCloudStorageProject.Entities;
 
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -11,6 +13,8 @@ public class DirectoryEntity
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "direntity_seq")
     private Long id;
 
+    @NotNull
+    @Column(unique = true)
     private String dirname;
 
     @OneToOne(mappedBy = "dir")

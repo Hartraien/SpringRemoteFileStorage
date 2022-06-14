@@ -5,12 +5,6 @@ package ru.hartraien.SpringCloudStorageProject.Services.SecurityServicePackage;
  */
 public interface SecurityService
 {
-    /**
-     * Finds username of logged user
-     *
-     * @return return name of user
-     */
-    String findLoggedInUsername();
 
     /**
      * automatically logins user by username and password, used after registration

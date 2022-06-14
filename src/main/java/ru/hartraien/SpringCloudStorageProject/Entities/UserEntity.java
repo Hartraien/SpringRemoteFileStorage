@@ -1,6 +1,10 @@
 package ru.hartraien.SpringCloudStorageProject.Entities;
 
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -13,9 +17,17 @@ public class UserEntity
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userentity_seq")
     private Long id;
 
+    @NotNull
+    @NotBlank(message = "Username should not be empty")
+    @Column(unique = true)
     private String username;
+    @NotNull
+    @NotBlank(message = "Password should not be empty")
     private String password;
 
+    @NotNull
+    @NotBlank(message = "Email should not be empty")
+    @Email
     private String email;
 
     private String resetPasswordToken;

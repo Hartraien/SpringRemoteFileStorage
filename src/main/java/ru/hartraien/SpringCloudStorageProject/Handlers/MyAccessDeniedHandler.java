@@ -22,11 +22,11 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if ( auth != null )
         {
-            logger.warn( "User " + auth.getName() + " tried to access protected URL " + request.getRequestURI() );
+            logger.warn( "User " + auth.getName() + " tried to access protected URL " + request.getRequestURI() + " Due to " + accessDeniedException.getMessage() );
         }
         else
         {
-            logger.warn( "Anonymous user tried to access protected URL " + request.getRequestURI() );
+            logger.warn( "Anonymous user tried to access protected URL " + request.getRequestURI() + " Due to " + accessDeniedException.getMessage());
         }
 
         response.sendRedirect( request.getContextPath() + "/accessdenied" );

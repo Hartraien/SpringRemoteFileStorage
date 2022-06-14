@@ -47,7 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     protected void configure( HttpSecurity http ) throws Exception
     {
         http
-                //.csrf().disable()
                 .authorizeRequests()
                 .antMatchers( "/lockedpage", "/uploadpage/**", "/download/**", "/viewfiles/**", "/userinfo/**", "/makedir" ).hasAnyAuthority( "Role_Admin", "Role_User" )
                 .antMatchers( "/userlist", "/userlist/**" ).hasAuthority( "Role_Admin" )
@@ -68,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .and()
                 .exceptionHandling().accessDeniedHandler( accessDeniedHandler );
 
-        http.headers().frameOptions().disable();
-
+        // Uncomment if using h2 database to access h2-console
+        //http.headers().frameOptions().disable().and().csrf().disable();
     }
 }

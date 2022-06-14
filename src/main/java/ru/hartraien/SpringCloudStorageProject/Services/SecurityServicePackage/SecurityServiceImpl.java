@@ -23,19 +23,6 @@ public class SecurityServiceImpl implements SecurityService
      * {@inheritDoc}
      */
     @Override
-    public String findLoggedInUsername()
-    {
-        final Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        if ( userDetails instanceof UserDetails )
-            return ( (UserDetails) userDetails ).getUsername();
-
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void autologin( String username, String password )
     {
         UserDetails userDetails = userDetailsService.loadUserByUsername( username );
