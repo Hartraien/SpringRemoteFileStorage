@@ -3,6 +3,7 @@ package ru.hartraien.SpringCloudStorageProject.Controllers.WebPage.FileControlle
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,8 +15,11 @@ import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.Sto
 import ru.hartraien.SpringCloudStorageProject.Services.StorageServicePackage.StorageService;
 import ru.hartraien.SpringCloudStorageProject.Services.UserServicePackage.UserService;
 
+import javax.validation.constraints.NotBlank;
+
 @Controller
 @RequestMapping("/makedir")
+@Validated
 public class DirMakerController extends AbstractFileController
 {
 
@@ -27,7 +31,7 @@ public class DirMakerController extends AbstractFileController
     }
 
     @PostMapping("")
-    public String makeDir( @RequestParam("name") String dirName,
+    public String makeDir( @RequestParam("name") @NotBlank String dirName,
                            @RequestParam("path") String path,
                            Authentication authentication,
                            RedirectAttributes redirectAttributes ) throws StorageException, DirectoryException
