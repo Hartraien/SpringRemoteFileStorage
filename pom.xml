@@ -9,15 +9,16 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ru.hartraien</groupId>
-    <artifactId>SpringCloudStorageProject</artifactId>
+    <artifactId>SpringRemoteFileStorage</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>SpringCloudStorageProject</name>
-    <description>Cloud storage</description>
+    <name>SpringRemoteFileStorage</name>
+    <description>Remote file storage</description>
     <properties>
         <java.version>11</java.version>
-        <start-class>ru.hartraien.SpringCloudStorageProject.SpringCloudStorageProjectApplication</start-class>
+        <start-class>ru.hartraien.SpringRemoteFileStorage.SpringRemoteFileStorageApplication</start-class>
         <h2.version>2.1.212</h2.version>
         <postgres.version>42.3.5</postgres.version>
+        <passay.version>1.6.1</passay.version>
     </properties>
 
 
@@ -65,7 +66,7 @@
         <dependency>
             <groupId>org.passay</groupId>
             <artifactId>passay</artifactId>
-            <version>1.6.1</version>
+            <version>${passay.version}</version>
         </dependency>
 
         <dependency>
